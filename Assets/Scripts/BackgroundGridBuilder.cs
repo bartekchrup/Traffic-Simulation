@@ -1,14 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class BackgroundGridBuilder : MonoBehaviour
 {
-    public GameObject grideSquare;
+    [SerializeField] public Tile gridSquare;
+    [SerializeField] public Tilemap backgroundGrid;
+    [SerializeField] public int gridWidth;
+    [SerializeField] public int gridHeight;
+    public CameraManager cameraManager;
 
     // Start is called before the first frame update
     void Start()
     {
+        Vector3Int middleCellGrid = new Vector3Int(gridWidth / 2, gridHeight / 2, 0);
+        Vector3 middleCellWorld = backgroundGrid.GetCellCenterWorld(middleCellGrid);
+        cameraManager.moveCamera(middleCellWorld);
+        for (int i = 0; i < gridWidth; i++) {
+            for (int j = 0; j < gridHeight; j++) {
+                Vector3Int coordinate = new Vector3Int(i, j, 0);
+                backgroundGrid.SetTile(coordinate, gridSquare);
+                Debug.Log("Added square to" + coordinate);
+            }
+        }
         
     }
 
