@@ -38,9 +38,6 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Backdrop
-    uniqueID: 3996898539
-    locked: 0
   - name: Background grid
     uniqueID: 2870127413
     locked: 0
