@@ -38,7 +38,7 @@ public partial class @UserInputSystem : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Zoom"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""f1268c17-a245-4d6e-aa73-9e3cacc471e0"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -158,9 +158,20 @@ public partial class @UserInputSystem : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Scroll Wheel"",
-                    ""id"": ""3e5f1d68-ed14-4be8-9c19-c7c9962beb66"",
-                    ""path"": ""1DAxis"",
+                    ""name"": """",
+                    ""id"": ""bc751860-90ba-4ad4-a5fc-bf732effa75c"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Q / E"",
+                    ""id"": ""b78d900d-eb22-415f-b41c-6acc6e89c786"",
+                    ""path"": ""1DAxis(minValue=-4,maxValue=4)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -170,22 +181,22 @@ public partial class @UserInputSystem : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""negative"",
-                    ""id"": ""d1ed3024-e41f-4163-bb0c-1679195e70b4"",
-                    ""path"": ""<Mouse>/scroll/down"",
+                    ""id"": ""ac7121c0-3c24-4c96-bea0-bb86c16d4533"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard"",
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""positive"",
-                    ""id"": ""fb8788d3-72fd-44b2-a5de-5fbe5777c825"",
-                    ""path"": ""<Mouse>/scroll/up"",
+                    ""id"": ""5327fd3a-9992-416a-b9e5-44bc74e45aa1"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Keyboard"",
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
