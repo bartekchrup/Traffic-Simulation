@@ -1,23 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraManager : MonoBehaviour
 {
+    private UserInputSystem inputSystem;
+    private float movementX;
+    private float movementY;
+    public float movementSpeed = 1;
 
-    public void moveCamera(Vector3 positionIn)
+    public void setCameraLocation(Vector3 positionIn)
     {
         transform.position = positionIn;
     }
-    // Start is called before the first frame update
-    void Start()
+
+    public void transformCamera(Vector2 movementVector)
     {
-        
+        movementVector *= movementSpeed * Time.deltaTime;
+        transform.Translate(movementVector.x, movementVector.y, 0);
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Awake() {
+        inputSystem = new UserInputSystem();
+    }
+
+    void FixedUpdate()
     {
-        
+        Vector2 cameraMovementVector = inputSystem.User.Move.ReadValue<Vector2>();
+        transformCamera(cameraMovementVector);
+    }
+
+    private void OnEnable()
+    {
+        inputSystem.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputSystem.Disable();
     }
 }
