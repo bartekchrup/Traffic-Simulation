@@ -50,7 +50,6 @@ public class CameraManager : MonoBehaviour
         // Multiplied by -1 to invert zoom axis
         zoomFactor = 1 + (zoomFactor * -1 * zoomSpeed * Time.deltaTime);
         float cameraSize = Camera.main.orthographicSize;
-        Debug.Log("Zoom factor: " + zoomFactor);
         Camera.main.orthographicSize = Mathf.Clamp(cameraSize *= zoomFactor, minZoomLevel, maxZoomLevel);
     }
 
