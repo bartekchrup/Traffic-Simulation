@@ -6,6 +6,7 @@ public class NewRoadSelectionTool : MonoBehaviour
 {
     [SerializeField] private NewRoadSelectionLine linePrefab;
     [SerializeField] private GameObject selectionCircle;
+    [SerializeField] private Settings userSettings;
     private Camera cam;
 
     private bool drawingLine;
@@ -14,12 +15,14 @@ public class NewRoadSelectionTool : MonoBehaviour
     private GameObject firstSelectionCircle;
     private GameObject secondSelectionCircle;
     private Vector2[] roadSegmentPoints;
+    private int gridSize;
 
     // Start is called before the first frame update
     void Start()
     {
         cam = Camera.main;
         drawingLine = false;
+        gridSize = userSettings.GridSize;
     }
 
     // Update is called once per frame
@@ -30,17 +33,20 @@ public class NewRoadSelectionTool : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && (! drawingLine)) {
             instantiantedLine = Instantiate(linePrefab);
             instantiantedLine.SetStartingPoint(mousePosition);
+            secondSelectionCircle = Instantiate(selectionCircle, mousePosition, Quaternion.identity);
             drawingLine = true;
 
         } else if (Input.GetMouseButtonDown(0) && drawingLine) {
             roadSegmentPoints = instantiantedLine.GetLinePoints();
             // Once the selection has been made the line is no longer needed
             Destroy(instantiantedLine.gameObject);
+            Destroy(secondSelectionCircle.gameObject);
             drawingLine = false;
         }
         // Update the position of the 2nd point of the line when the mouse moves
         if (drawingLine) {
             instantiantedLine.SetSecondPoint(mousePosition);
+            secondSelectionCircle.transform.position = mousePosition;
         } else {
             if (firstSelectionCircle) {
                 firstSelectionCircle.transform.position = mousePosition;

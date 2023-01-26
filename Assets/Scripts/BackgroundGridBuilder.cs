@@ -5,11 +5,20 @@ using UnityEngine.Tilemaps;
 
 public class BackgroundGridBuilder : MonoBehaviour
 {
-    [SerializeField] public Tile gridSquare;
-    [SerializeField] public Tilemap backgroundGrid;
-    [SerializeField] public int gridWidth;
-    [SerializeField] public int gridHeight;
+    [SerializeField] private Tile gridSquare;
+    [SerializeField] private Tilemap backgroundGrid;
+    [SerializeField] private Settings userSettings;
+
+    private int gridWidth;
+    private int gridHeight;
     public CameraManager cameraManager;
+
+    // Retrieve size of canvas from user settings
+    void Awake()
+    {
+        gridWidth = userSettings.CanvasWidth;
+        gridHeight = userSettings.CanvasHeight;
+    }
 
     // Start is called before the first frame update
     void Start()
