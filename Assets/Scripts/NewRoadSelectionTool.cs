@@ -17,12 +17,12 @@ public class NewRoadSelectionTool : MonoBehaviour
     private Vector2[] roadSegmentPoints;
     private int gridSize;
 
-    // Start is called before the first frame update
-    void Start()
+    // Instantiate variables
+    void Awake()
     {
+        gridSize = userSettings.GridSize;
         cam = Camera.main;
         drawingLine = false;
-        gridSize = userSettings.GridSize;
     }
 
     // Update is called once per frame
