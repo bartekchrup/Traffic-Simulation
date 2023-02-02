@@ -5,20 +5,22 @@ using UnityEngine;
 public class NewRoadSelectionLine : MonoBehaviour
 {
     [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private Settings userSettings;
-    int gridSize;
+    private int gridSize;
 
     // Start is called before the first frame update
     void Awake()
     {
         lineRenderer.positionCount = 2; // The line will be between 2 points
-        gridSize = userSettings.GridSize;
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    public void SetGridSize(int valueIn) {
+        gridSize = valueIn;
     }
 
     public void SetStartingPoint(Vector2 point) {

@@ -7,6 +7,8 @@ public class NewRoadSelectionTool : MonoBehaviour
     [SerializeField] private NewRoadSelectionLine linePrefab;
     [SerializeField] private GameObject selectionCircle;
     [SerializeField] private Settings userSettings;
+
+    public int gridSize;
     private Camera cam;
 
     private bool drawingLine;
@@ -15,7 +17,6 @@ public class NewRoadSelectionTool : MonoBehaviour
     private GameObject firstSelectionCircle;
     private GameObject secondSelectionCircle;
     private Vector2[] roadSegmentPoints;
-    private int gridSize;
 
     // Instantiate variables
     void Awake()
@@ -23,6 +24,9 @@ public class NewRoadSelectionTool : MonoBehaviour
         gridSize = userSettings.GridSize;
         cam = Camera.main;
         drawingLine = false;
+        instantiantedLine = Instantiate(linePrefab);
+        instantiantedLine.SetGridSize(gridSize);
+        instantiantedLine.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -31,15 +35,15 @@ public class NewRoadSelectionTool : MonoBehaviour
         Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
         // Starting new selection
         if (Input.GetMouseButtonDown(0) && (! drawingLine)) {
-            instantiantedLine = Instantiate(linePrefab);
+            instantiantedLine.gameObject.SetActive(true);
             instantiantedLine.SetStartingPoint(mousePosition);
             secondSelectionCircle = Instantiate(selectionCircle, mousePosition, Quaternion.identity);
             drawingLine = true;
 
         } else if (Input.GetMouseButtonDown(0) && drawingLine) {
             roadSegmentPoints = instantiantedLine.GetLinePoints();
-            // Once the selection has been made the line is no longer needed
-            Destroy(instantiantedLine.gameObject);
+            // Once the selection has been made the line is no longer displayed
+            instantiantedLine.gameObject.SetActive(false);
             Destroy(secondSelectionCircle.gameObject);
             drawingLine = false;
         }
