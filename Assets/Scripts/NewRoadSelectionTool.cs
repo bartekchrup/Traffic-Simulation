@@ -27,36 +27,37 @@ public class NewRoadSelectionTool : MonoBehaviour
         instantiantedLine = Instantiate(linePrefab);
         instantiantedLine.SetGridSize(gridSize);
         instantiantedLine.gameObject.SetActive(false);
+        firstSelectionCircle = Instantiate(selectionCircle);
     }
 
     // Update is called once per frame
     void Update()
     {
         Vector2 mouseGridPos = roundToGrid(cam.ScreenToWorldPoint(Input.mousePosition));
-        // Starting new selection
-        if (Input.GetMouseButtonDown(0) && (! drawingLine)) {
-            instantiantedLine.gameObject.SetActive(true);
-            instantiantedLine.SetStartingPoint(mouseGridPos);
-            secondSelectionCircle = Instantiate(selectionCircle, mouseGridPos, Quaternion.identity);
-            drawingLine = true;
+        // When the user presses left click
+        if (Input.GetMouseButtonDown(0)) {
+            // If a new selection must be started
+            if (!drawingLine) {
+                instantiantedLine.gameObject.SetActive(true);
+                instantiantedLine.SetStartingPoint(mouseGridPos);
+                secondSelectionCircle = Instantiate(selectionCircle, mouseGridPos, Quaternion.identity);
+                drawingLine = true;
 
-        } else if (Input.GetMouseButtonDown(0) && drawingLine) {
-            roadSegmentPoints = instantiantedLine.GetLinePoints();
-            // Once the selection has been made the line is no longer displayed
-            instantiantedLine.gameObject.SetActive(false);
-            Destroy(secondSelectionCircle.gameObject);
-            drawingLine = false;
+            } else {
+                roadSegmentPoints = instantiantedLine.GetLinePoints();
+                Debug.Log("Selected line: " + roadSegmentPoints[0] + " to " + roadSegmentPoints[1]);
+                // Once the selection has been made the line is no longer displayed
+                instantiantedLine.gameObject.SetActive(false);
+                Destroy(secondSelectionCircle.gameObject);
+                drawingLine = false;
+            }
         }
         // Update the position of the 2nd point of the line when the mouse moves
         if (drawingLine) {
             instantiantedLine.SetSecondPoint(mouseGridPos);
             secondSelectionCircle.transform.position = mouseGridPos;
         } else {
-            if (firstSelectionCircle) {
-                firstSelectionCircle.transform.position = mouseGridPos;
-            } else  {
-                firstSelectionCircle = Instantiate(selectionCircle, mouseGridPos, Quaternion.identity);
-            }
+            firstSelectionCircle.transform.position = mouseGridPos;
         }
 
     }
