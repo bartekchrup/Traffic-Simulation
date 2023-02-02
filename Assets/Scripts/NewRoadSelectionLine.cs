@@ -5,7 +5,7 @@ using UnityEngine;
 public class NewRoadSelectionLine : MonoBehaviour
 {
     [SerializeField] private LineRenderer lineRenderer;
-    private int gridSize;
+    private float gridSize;
 
     // Start is called before the first frame update
     void Awake()
@@ -19,7 +19,7 @@ public class NewRoadSelectionLine : MonoBehaviour
 
     }
 
-    public void SetGridSize(int valueIn) {
+    public void SetGridSize(float valueIn) {
         gridSize = valueIn;
     }
 

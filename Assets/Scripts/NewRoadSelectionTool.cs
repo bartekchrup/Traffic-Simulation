@@ -8,7 +8,7 @@ public class NewRoadSelectionTool : MonoBehaviour
     [SerializeField] private GameObject selectionCircle;
     [SerializeField] private Settings userSettings;
 
-    public int gridSize;
+    public float gridSize;
     private Camera cam;
 
     private bool drawingLine;
@@ -32,12 +32,12 @@ public class NewRoadSelectionTool : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mouseGridPos = roundToGrid(cam.ScreenToWorldPoint(Input.mousePosition));
         // Starting new selection
         if (Input.GetMouseButtonDown(0) && (! drawingLine)) {
             instantiantedLine.gameObject.SetActive(true);
-            instantiantedLine.SetStartingPoint(mousePosition);
-            secondSelectionCircle = Instantiate(selectionCircle, mousePosition, Quaternion.identity);
+            instantiantedLine.SetStartingPoint(mouseGridPos);
+            secondSelectionCircle = Instantiate(selectionCircle, mouseGridPos, Quaternion.identity);
             drawingLine = true;
 
         } else if (Input.GetMouseButtonDown(0) && drawingLine) {
@@ -49,16 +49,24 @@ public class NewRoadSelectionTool : MonoBehaviour
         }
         // Update the position of the 2nd point of the line when the mouse moves
         if (drawingLine) {
-            instantiantedLine.SetSecondPoint(mousePosition);
-            secondSelectionCircle.transform.position = mousePosition;
+            instantiantedLine.SetSecondPoint(mouseGridPos);
+            secondSelectionCircle.transform.position = mouseGridPos;
         } else {
             if (firstSelectionCircle) {
-                firstSelectionCircle.transform.position = mousePosition;
+                firstSelectionCircle.transform.position = mouseGridPos;
             } else  {
-                firstSelectionCircle = Instantiate(selectionCircle, mousePosition, Quaternion.identity);
+                firstSelectionCircle = Instantiate(selectionCircle, mouseGridPos, Quaternion.identity);
             }
         }
 
+    }
+
+    // Helper functions
+    Vector2 roundToGrid(Vector2 coordinates) {
+        Vector2 rounded;
+        rounded.x = (Mathf.Round(coordinates.x / gridSize)) * gridSize;
+        rounded.y = (Mathf.Round(coordinates.y / gridSize)) * gridSize;
+        return rounded;
     }
 
 }

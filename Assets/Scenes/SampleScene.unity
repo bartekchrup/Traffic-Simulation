@@ -346,6 +346,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linePrefab: {fileID: 8851981893765490005, guid: 08f0113cc1b7e5b4381fa9ba0d4decbc, type: 3}
   selectionCircle: {fileID: 3915335225201154842, guid: b9f2251e6092ade4b86b4e14515dbdf5, type: 3}
+  userSettings: {fileID: 1520026410}
+  gridSize: 0
 --- !u!1 &870260445
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,7 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 478645dc03a1ddb4fb94dab40efc798e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridSize: 10
+  GridSize: 0.5
   CanvasWidth: 70
   CanvasHeight: 50
 --- !u!1 &1617537278
