@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class NewRoadSelectionTool : MonoBehaviour
 {
@@ -33,6 +34,11 @@ public class NewRoadSelectionTool : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Don't update if over UI
+        if (EventSystem.current.IsPointerOverGameObject()) {
+            return;
+        }
+        
         Vector2 mouseGridPos = roundToGrid(cam.ScreenToWorldPoint(Input.mousePosition));
         // When the user presses left click
         if (Input.GetMouseButtonDown(0)) {
