@@ -28,7 +28,20 @@ public class NewRoadSelectionTool : MonoBehaviour
         instantiantedLine = Instantiate(linePrefab);
         instantiantedLine.SetGridSize(gridSize);
         instantiantedLine.gameObject.SetActive(false);
+    }
+
+    // Only the first selection circle is instantiated on enable as the rest is spawned on clicks
+    void OnEnable() {
         firstSelectionCircle = Instantiate(selectionCircle);
+
+    }
+
+    // Hide lines and circles when disabled
+    void OnDisable() {
+        instantiantedLine.gameObject.SetActive(false);
+        Destroy(secondSelectionCircle.gameObject);
+        Destroy(firstSelectionCircle.gameObject);
+        drawingLine = false;
     }
 
     // Update is called once per frame
@@ -52,10 +65,8 @@ public class NewRoadSelectionTool : MonoBehaviour
             } else {
                 roadSegmentPoints = instantiantedLine.GetLinePoints();
                 Debug.Log("Selected line: " + roadSegmentPoints[0] + " to " + roadSegmentPoints[1]);
-                // Once the selection has been made the line is no longer displayed
-                instantiantedLine.gameObject.SetActive(false);
-                Destroy(secondSelectionCircle.gameObject);
-                drawingLine = false;
+                // Once the selection has been made the line is no longer displayed or updated
+                this.enabled = false;
             }
         }
         // Update the position of the 2nd point of the line when the mouse moves
@@ -69,7 +80,7 @@ public class NewRoadSelectionTool : MonoBehaviour
     }
 
     // Helper functions
-    Vector2 roundToGrid(Vector2 coordinates) {
+    private Vector2 roundToGrid(Vector2 coordinates) {
         Vector2 rounded;
         rounded.x = (Mathf.Round(coordinates.x / gridSize)) * gridSize;
         rounded.y = (Mathf.Round(coordinates.y / gridSize)) * gridSize;
