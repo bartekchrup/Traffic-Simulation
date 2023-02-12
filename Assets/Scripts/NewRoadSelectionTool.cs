@@ -8,6 +8,7 @@ public class NewRoadSelectionTool : MonoBehaviour
     [SerializeField] private NewRoadSelectionLine linePrefab;
     [SerializeField] private GameObject selectionCircle;
     [SerializeField] private Settings userSettings;
+    [SerializeField] private NewRoadDrawManager roadDrawer;
 
     public float gridSize;
     private Camera cam;
@@ -65,6 +66,7 @@ public class NewRoadSelectionTool : MonoBehaviour
             } else {
                 roadSegmentPoints = instantiantedLine.GetLinePoints();
                 Debug.Log("Selected line: " + roadSegmentPoints[0] + " to " + roadSegmentPoints[1]);
+                roadDrawer.AddNewRoad(roadSegmentPoints);
                 // Once the selection has been made the line is no longer displayed or updated
                 this.enabled = false;
             }
