@@ -1145,6 +1145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7710b26164b93944b8f7ad4e980bc3db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  userSettings: {fileID: 0}
   fwdInputField: {fileID: 1295438352}
   revInputField: {fileID: 547684131}
   laneWidth: 3
@@ -2514,6 +2515,7 @@ MonoBehaviour:
   GridSize: 0.5
   CanvasWidth: 70
   CanvasHeight: 50
+  LeftHandDrive: 0
 --- !u!1 &1741476144
 GameObject:
   m_ObjectHideFlags: 0
