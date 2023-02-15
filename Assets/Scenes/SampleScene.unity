@@ -1132,7 +1132,6 @@ MonoBehaviour:
   selectionCircle: {fileID: 3915335225201154842, guid: b9f2251e6092ade4b86b4e14515dbdf5, type: 3}
   userSettings: {fileID: 1520026410}
   roadDrawer: {fileID: 855628752}
-  gridSize: 0
 --- !u!114 &855628752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1148,7 +1147,10 @@ MonoBehaviour:
   userSettings: {fileID: 1520026410}
   fwdInputField: {fileID: 1295438352}
   revInputField: {fileID: 547684131}
-  laneWidth: 3
+  dashedLinePrefab: {fileID: -1860950346803643761, guid: 8dd7e526013cf0346a10c67d0664e5f5, type: 3}
+  solidLinePrefab: {fileID: 8851981893765490005, guid: 08f0113cc1b7e5b4381fa9ba0d4decbc, type: 3}
+  roadDividorLinesSeperation: 0.12
+  roadDividorLineWidth: 0.08
 --- !u!1 &870260445
 GameObject:
   m_ObjectHideFlags: 0
@@ -2515,7 +2517,7 @@ MonoBehaviour:
   GridSize: 0.5
   CanvasWidth: 70
   CanvasHeight: 50
-  LeftHandDrive: 0
+  LeftHandDrive: 1
 --- !u!1 &1741476144
 GameObject:
   m_ObjectHideFlags: 0

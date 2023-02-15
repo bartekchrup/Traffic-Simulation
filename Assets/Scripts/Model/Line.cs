@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class Line
 {
+    // Returns a parallel line to the given one, offset by the float given
+    public static Line parallelLine(Line l, float offset) {
+        float newx1 = l.x1 + offset * (l.y2 - l.y1) / l.length;
+        float newx2 = l.x2 + offset * (l.y2 - l.y1) / l.length;
+        float newy1 = l.y1 - offset * (l.x2 - l.x1) / l.length;
+        float newy2 = l.y2 - offset * (l.x2 - l.x1) / l.length;
+
+        return new Line(newx1, newy1, newx2, newy2);
+    }
+
     // Readonly properties
     public float x1 { get; private set; }
     public float y1 { get; private set; }
@@ -27,7 +37,12 @@ public class Line
         length = calculateLength();
     }
 
-    // returns the points of the line in a readable format
+    // Returns the same line but with the end points reversed
+    // public Line GetReverse() {
+    //     return new Line(x2, y2, x1, y1);
+    // }
+
+    // Returns the points of the line in a readable format
     public string GetPrintable() {
         return $"({x1}, {y1}), ({x2}, {y2}) length: {length}";
     }
@@ -35,5 +50,6 @@ public class Line
     private float calculateLength() {
         return Mathf.Sqrt((x1-x2) * (x1-x2) + (y1-y2) * (y1-y2));
     }
+
 
 }

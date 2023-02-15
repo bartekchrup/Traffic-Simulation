@@ -5,16 +5,16 @@ using UnityEngine.EventSystems;
 
 public class NewRoadSelectionTool : MonoBehaviour
 {
-    [SerializeField] private NewRoadSelectionLine linePrefab;
+    [SerializeField] private LineDrawer linePrefab;
     [SerializeField] private GameObject selectionCircle;
     [SerializeField] private Settings userSettings;
     [SerializeField] private NewRoadDrawManager roadDrawer;
 
-    public float gridSize;
+    private float gridSize;
     private Camera cam;
 
     private bool drawingLine;
-    private NewRoadSelectionLine instantiantedLine;
+    private LineDrawer instantiantedLine;
     // The user makes 2 selections to create a road segment
     private GameObject firstSelectionCircle;
     private GameObject secondSelectionCircle;
@@ -27,7 +27,6 @@ public class NewRoadSelectionTool : MonoBehaviour
         cam = Camera.main;
         drawingLine = false;
         instantiantedLine = Instantiate(linePrefab);
-        instantiantedLine.SetGridSize(gridSize);
         instantiantedLine.gameObject.SetActive(false);
     }
 

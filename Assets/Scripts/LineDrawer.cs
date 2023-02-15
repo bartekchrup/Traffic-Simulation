@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewRoadSelectionLine : MonoBehaviour
+public class LineDrawer : MonoBehaviour
 {
     [SerializeField] private LineRenderer lineRenderer;
-    private float gridSize;
 
     // Start is called before the first frame update
     void Awake()
@@ -13,14 +12,9 @@ public class NewRoadSelectionLine : MonoBehaviour
         lineRenderer.positionCount = 2; // The line will be between 2 points
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public void SetGridSize(float valueIn) {
-        gridSize = valueIn;
+    public void SetPoints(Line line) {
+        lineRenderer.SetPosition(0, new Vector2(line.x1, line.y1));
+        lineRenderer.SetPosition(1, new Vector2(line.x2, line.y2));
     }
 
     public void SetStartingPoint(Vector2 point) {
@@ -29,6 +23,10 @@ public class NewRoadSelectionLine : MonoBehaviour
 
     public void SetSecondPoint(Vector2 point) {
         lineRenderer.SetPosition(1, point);
+    }
+
+    public void SetLineWidth(float width) {
+        lineRenderer.startWidth = width;
     }
 
     // Returns the 2 points the user has selected for the road to get in between
