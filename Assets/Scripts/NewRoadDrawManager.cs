@@ -28,12 +28,12 @@ public class NewRoadDrawManager : MonoBehaviour
         
     }
 
-    public void AddNewRoad(Vector2[] endPoints) {
+    public void AddNewRoad(Line roadCentreLine) {
         // If the number of lanes on the road selected is invalid, return.
         if (! updateLaneNumberVars()) {
             return;
         }
-        roadSegments.Add(new RoadSegment(endPoints, fwdLanesNumber, revLanesNumber, leftHandDrive));
+        roadSegments.Add(new RoadSegment(roadCentreLine, fwdLanesNumber, revLanesNumber, leftHandDrive));
     }
 
     private bool updateLaneNumberVars() {

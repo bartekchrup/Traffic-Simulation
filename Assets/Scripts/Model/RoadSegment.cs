@@ -7,18 +7,16 @@ public class RoadSegment
     private int fwdLanes;
     private int revLanes;
 
-    private Vector2 roadMiddleStart;
-    private Vector2 roadMiddleEnd;
+    private Line roadCentreLine;
     private bool leftHandDrive;
     private LaneSegment[] lanes;
 
-    public RoadSegment(Vector2[] endPoints, int fwdLanesIn, int revLanesIn, bool leftHandDriveIn) {
+    public RoadSegment(Line roadCentreLineIn, int fwdLanesIn, int revLanesIn, bool leftHandDriveIn) {
+        roadCentreLine = roadCentreLineIn;
         fwdLanes = fwdLanesIn;
         revLanes = revLanesIn;
         leftHandDrive = leftHandDriveIn;
         lanes = new LaneSegment[fwdLanes + revLanes];
-        roadMiddleStart = endPoints[0];
-        roadMiddleEnd = endPoints[1];
 
         for (int lane = 0; lane < fwdLanes; lane++) {
             lanes[lane] = new LaneSegment();
@@ -28,9 +26,9 @@ public class RoadSegment
         }
 
         Debug.Log("Number of lanes: " + lanes.Length);
-        foreach (LaneSegment lane in lanes) {
-            Debug.Log(lane);
-        }
+        Line newLine = parallelLine(roadCentreLine, 1);
+        Debug.Log("original line:" + roadCentreLine.GetPrintable());
+        Debug.Log("new line:     " + newLine.GetPrintable());
     }
 
     // private Vector2[] calculateLaneMiddleLine(int laneIndex) {
@@ -39,4 +37,16 @@ public class RoadSegment
 
     //     }
     // }
+
+    // Helper functions
+
+    // Returns a parallel line to the given one, offset by the float given
+    private Line parallelLine(Line l, float offset) {
+        float newx1 = l.x1 - offset * (l.y2 - l.y1) / l.length;
+        float newx2 = l.x2 - offset * (l.y2 - l.y1) / l.length;
+        float newy1 = l.y1 + offset * (l.x2 - l.x1) / l.length;
+        float newy2 = l.y2 + offset * (l.x2 - l.x1) / l.length;
+
+        return new Line(newx1, newy1, newx2, newy2);
+    }
 }

@@ -18,7 +18,7 @@ public class NewRoadSelectionTool : MonoBehaviour
     // The user makes 2 selections to create a road segment
     private GameObject firstSelectionCircle;
     private GameObject secondSelectionCircle;
-    private Vector2[] roadSegmentPoints;
+    private Line roadCentreLine;
 
     // Instantiate variables
     void Awake()
@@ -64,9 +64,8 @@ public class NewRoadSelectionTool : MonoBehaviour
                 drawingLine = true;
 
             } else {
-                roadSegmentPoints = instantiantedLine.GetLinePoints();
-                Debug.Log("Selected line: " + roadSegmentPoints[0] + " to " + roadSegmentPoints[1]);
-                roadDrawer.AddNewRoad(roadSegmentPoints);
+                roadCentreLine = new Line(instantiantedLine.GetLinePoints());
+                roadDrawer.AddNewRoad(roadCentreLine);
                 // Once the selection has been made the line is no longer displayed or updated
                 this.enabled = false;
             }
