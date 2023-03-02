@@ -39,6 +39,10 @@ public class NewRoadDrawManager : MonoBehaviour
         drawLaneMarkings(newRoad);
     }
 
+    public List<RoadSegment> GetRoadSegments() {
+        return roadSegments;
+    }
+
     private void drawRoadEdges(RoadSegment road) {
         LineDrawer roadEdgeLine = Instantiate(solidLinePrefab);
         roadEdgeLine.SetPoints(road.GetLeftRoadEdge());

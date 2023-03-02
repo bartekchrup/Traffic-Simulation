@@ -37,6 +37,10 @@ public class Line
         length = calculateLength();
     }
 
+    public Vector2[] GetPoints() {
+        return new Vector2[] { new Vector2(x1, y1), new Vector2(x2, y2) };
+    }
+
     // Returns the same line but with the end points reversed
     // public Line GetReverse() {
     //     return new Line(x2, y2, x1, y1);

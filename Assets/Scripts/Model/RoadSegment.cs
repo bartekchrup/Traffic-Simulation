@@ -28,6 +28,10 @@ public class RoadSegment
     
     }
 
+    public Line GetRoadCentreLine() {
+        return roadCentreLine;
+    }
+
     public Line GetLeftRoadEdge() {
         // First lane
         Line retu = lanes[0].GetLeftEdge();
@@ -51,6 +55,7 @@ public class RoadSegment
         }
     }
 
+    // Returns lines for every border between two lanes in the same direction
     public List<Line> GetLaneEdges() {
         List<Line> laneEdges = new List<Line>();
         for (int laneIndex = 1; laneIndex < lanes.Length; laneIndex++) {
