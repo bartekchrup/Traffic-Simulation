@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class RoadEndMarkerManager : MonoBehaviour
+public class RoadEndMarkerManager : MonoBehaviour, IPointerClickHandler
 {
     private RoadSegment road;
     // for identifying which end of the road, 0 is the start of the road, 1 is the end of the road
@@ -23,6 +24,17 @@ public class RoadEndMarkerManager : MonoBehaviour
         return roadEndIndex;
     }
 
+    public void OnPointerClick(PointerEventData eventData) {
+        if (eventData.button == PointerEventData.InputButton.Left) {
+            isSelected = !isSelected;
+            Debug.Log("This marker is now " + (isSelected? "selected" : "unselected"));
+            if (isSelected) {
+                this.GetComponentInChildren<SpriteRenderer>().color = Color.green;
+            } else {
+                this.GetComponentInChildren<SpriteRenderer>().color = Color.red;
+            }
+        }
+    }
     // Toggles the selected state of the road end marker
     public void MarkerClicked() {
         isSelected = !isSelected;
@@ -32,10 +44,6 @@ public class RoadEndMarkerManager : MonoBehaviour
         } else {
             this.GetComponentInChildren<SpriteRenderer>().color = Color.red;
         }
-    }
-
-    public void Test() {
-        Debug.Log("This is a test");
     }
 
 }
