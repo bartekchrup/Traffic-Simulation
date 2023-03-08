@@ -9,6 +9,8 @@ public class NewRoadSelectionTool : MonoBehaviour
     [SerializeField] private GameObject selectionCircle;
     [SerializeField] private Settings userSettings;
     [SerializeField] private NewRoadDrawManager roadDrawer;
+    // For updating status bar
+    [SerializeField] private StatusBarManager statusBarManager;
 
     private float gridSize;
     private Camera cam;
@@ -32,12 +34,14 @@ public class NewRoadSelectionTool : MonoBehaviour
 
     // Only the first selection circle is instantiated on enable as the rest is spawned on clicks
     void OnEnable() {
+        statusBarManager.SetTextDrawing();
         firstSelectionCircle = Instantiate(selectionCircle);
 
     }
 
     // Hide lines and circles when disabled
     void OnDisable() {
+        statusBarManager.SetTextIdle();
         instantiantedLine.gameObject.SetActive(false);
         Destroy(secondSelectionCircle.gameObject);
         Destroy(firstSelectionCircle.gameObject);

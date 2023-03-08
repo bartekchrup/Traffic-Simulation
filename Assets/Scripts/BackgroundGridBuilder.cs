@@ -37,9 +37,12 @@ public class BackgroundGridBuilder : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void DarkenBackground() {
+        backgroundGrid.color = Color.black;
     }
+
+    public void ResetBackground() {
+        backgroundGrid.color = Color.white;
+    }
+
 }

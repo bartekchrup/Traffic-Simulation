@@ -24,6 +24,7 @@ public class RoadEndMarkerManager : MonoBehaviour, IPointerClickHandler
         return roadEndIndex;
     }
 
+    // Toggles the selected state of the road end marker
     public void OnPointerClick(PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Left) {
             isSelected = !isSelected;
@@ -33,16 +34,6 @@ public class RoadEndMarkerManager : MonoBehaviour, IPointerClickHandler
             } else {
                 this.GetComponentInChildren<SpriteRenderer>().color = Color.red;
             }
-        }
-    }
-    // Toggles the selected state of the road end marker
-    public void MarkerClicked() {
-        isSelected = !isSelected;
-        Debug.Log("This marker is now " + (isSelected? "selected" : "unselected"));
-        if (isSelected) {
-            this.GetComponentInChildren<SpriteRenderer>().color = Color.green;
-        } else {
-            this.GetComponentInChildren<SpriteRenderer>().color = Color.red;
         }
     }
 
