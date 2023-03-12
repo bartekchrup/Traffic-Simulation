@@ -1575,6 +1575,7 @@ MonoBehaviour:
   backgroundManager: {fileID: 870260449}
   connectButtonText: {fileID: 561444087}
   drawButton: {fileID: 1508374413}
+  solidLinePrefab: {fileID: 8851981893765490005, guid: 08f0113cc1b7e5b4381fa9ba0d4decbc, type: 3}
 --- !u!4 &886940391
 Transform:
   m_ObjectHideFlags: 0

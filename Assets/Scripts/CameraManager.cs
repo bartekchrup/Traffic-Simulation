@@ -62,4 +62,5 @@ public class CameraManager : MonoBehaviour
     {
         inputSystem.Disable();
     }
+
 }

@@ -35,7 +35,6 @@ public class RoadSegment
     public Line GetLeftRoadEdge() {
         // First lane
         Line retu = lanes[0].GetLeftEdge();
-        Debug.Log("Centre: " + lanes[0].centreLine.GetPrintable() + " left edge: " + retu.GetPrintable());
         return retu;
     }
 
@@ -65,6 +64,15 @@ public class RoadSegment
             }
         }
         return laneEdges;
+    }
+
+    // Returns 2 coordinates for the edge of the road at the end specified
+    // index of 0 means end of road near to first coordinates of road
+    public List<Vector2> GetEndEdgeCoordinates(int index) {
+        List<Vector2> roadCorners = new List<Vector2>();
+        roadCorners.Add(GetLeftRoadEdge().GetPoint(index));
+        roadCorners.Add(GetRightRoadEdge().GetPoint(index));
+        return roadCorners;
     }
 
     private Line calculateLaneMiddleLine(int laneIndex) {

@@ -9,6 +9,5 @@ public class ConnectButtonCustodian : MonoBehaviour
     // Toggles state of connecting mode script
     public void ConnectButtonPressed() {
         connectionScript.enabled = !connectionScript.enabled;
-        Debug.Log("the button is now " + (connectionScript.enabled? "enabled" : "disabled"));
     }
 }

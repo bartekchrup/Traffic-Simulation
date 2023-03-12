@@ -41,6 +41,10 @@ public class Line
         return new Vector2[] { new Vector2(x1, y1), new Vector2(x2, y2) };
     }
 
+    public Vector2 GetPoint(int index) {
+        return GetPoints()[index];
+    }
+
     // Returns the same line but with the end points reversed
     // public Line GetReverse() {
     //     return new Line(x2, y2, x1, y1);

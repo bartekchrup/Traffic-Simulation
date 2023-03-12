@@ -17,6 +17,11 @@ public class LineDrawer : MonoBehaviour
         lineRenderer.SetPosition(1, new Vector2(line.x2, line.y2));
     }
 
+    public void SetPoints(Vector2 point1, Vector2 point2) {
+        lineRenderer.SetPosition(0, new Vector2(point1.x, point1.y));
+        lineRenderer.SetPosition(1, new Vector2(point2.x, point2.y));
+    }
+
     public void SetStartingPoint(Vector2 point) {
         lineRenderer.SetPosition(0, point);
     }
@@ -27,6 +32,11 @@ public class LineDrawer : MonoBehaviour
 
     public void SetLineWidth(float width) {
         lineRenderer.startWidth = width;
+    }
+
+    public void SetColor(Color color) {
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
     }
 
     // Returns the 2 points the user has selected for the road to get in between
