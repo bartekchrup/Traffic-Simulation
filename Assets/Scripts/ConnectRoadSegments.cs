@@ -57,15 +57,15 @@ public class ConnectRoadSegments : MonoBehaviour
             RoadEndMarkerManager markerManager = roadEndMarker.GetComponent<RoadEndMarkerManager>();
             // Only consider roads that have been selected for connection
             if (markerManager.IsSelected()) {
-                RoadSegment markerRoad = markerManager.GetRoad();
-                int roadEndIndex = markerManager.GetRoadEndIndex();
-                roadCorners.Add(markerRoad.GetEndEdgeCoordinates(roadEndIndex));
+                RoadNode roadNode = markerManager.roadNode;
+                roadCorners.Add(roadNode.GetNodeEdgeCoordinates());
             }
         }
 
         // Only draw connections if more than one road is selected
         if (roadCorners.Count > 0) {
             drawConnections(roadCorners);
+
         }
         
         // Remove old markers

@@ -11,21 +11,30 @@ public class RoadSegment
     private bool leftHandDrive;
     private LaneSegment[] lanes;
 
+    private RoadNode[] roadNodes;
+
     public RoadSegment(Line roadCentreLineIn, int fwdLanesIn, int revLanesIn, bool leftHandDriveIn) {
         roadCentreLine = roadCentreLineIn;
         fwdLanes = fwdLanesIn;
         revLanes = revLanesIn;
         leftHandDrive = leftHandDriveIn;
         lanes = new LaneSegment[fwdLanes + revLanes];
+        RoadNode[] roadNodes = {new RoadNode(this, 0), new RoadNode(this, 1)};
+
         Debug.Log("Centre line: " + roadCentreLine.GetPrintable());
         for (int lane = 0; lane < lanes.Length; lane++) {
             bool isLaneReverse = ((leftHandDrive && lane >= fwdLanes) || (! leftHandDrive && lane < revLanes));
             lanes[lane] = new LaneSegment(calculateLaneMiddleLine(lane), isLaneReverse);
             Debug.Log("Lane " + lane + ": " + lanes[lane].centreLine.GetPrintable());
         }
+    }
 
-        Debug.Log("Number of lanes: " + lanes.Length);
-    
+    public void AddRoadConnection(RoadConnection connection) {
+
+    }
+
+    public RoadNode GetRoadNode(int index) {
+        return roadNodes[index];
     }
 
     public Line GetRoadCentreLine() {
