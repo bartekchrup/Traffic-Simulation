@@ -19,7 +19,7 @@ public class RoadSegment
         revLanes = revLanesIn;
         leftHandDrive = leftHandDriveIn;
         lanes = new LaneSegment[fwdLanes + revLanes];
-        RoadNode[] roadNodes = {new RoadNode(this, 0), new RoadNode(this, 1)};
+        roadNodes = new RoadNode[] {new RoadNode(this, 0), new RoadNode(this, 1)};
 
         Debug.Log("Centre line: " + roadCentreLine.GetPrintable());
         for (int lane = 0; lane < lanes.Length; lane++) {
@@ -27,10 +27,6 @@ public class RoadSegment
             lanes[lane] = new LaneSegment(calculateLaneMiddleLine(lane), isLaneReverse);
             Debug.Log("Lane " + lane + ": " + lanes[lane].centreLine.GetPrintable());
         }
-    }
-
-    public void AddRoadConnection(RoadConnection connection) {
-
     }
 
     public RoadNode GetRoadNode(int index) {
@@ -73,6 +69,18 @@ public class RoadSegment
             }
         }
         return laneEdges;
+    }
+
+    // Returns lanes with requested isReverse value
+    public List<LaneSegment> GetDirectionLanes(bool isLaneReverse) {
+        List<LaneSegment> lanesInDirection = new List<LaneSegment>();
+        foreach (LaneSegment lane in lanes) {
+            if (lane.isReverse == isLaneReverse) {
+                lanesInDirection.Add(lane);
+            }
+        }
+        return lanesInDirection;
+
     }
 
     // Returns 2 coordinates for the edge of the road at the end specified

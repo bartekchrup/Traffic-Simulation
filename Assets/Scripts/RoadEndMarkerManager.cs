@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class RoadEndMarkerManager : MonoBehaviour, IPointerClickHandler
+public class RoadEndMarkerManager : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    private const float HOVER_SCALE_FACTOR = 1.4f;
     public RoadNode roadNode { get; private set; }
     private bool isSelected = false;
 
@@ -28,6 +29,14 @@ public class RoadEndMarkerManager : MonoBehaviour, IPointerClickHandler
                 this.GetComponentInChildren<SpriteRenderer>().color = Color.red;
             }
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData) {
+        transform.localScale *= HOVER_SCALE_FACTOR;
+    }
+
+    public void OnPointerExit(PointerEventData eventData) {
+        transform.localScale /= HOVER_SCALE_FACTOR;
     }
 
     public void Destroy() {

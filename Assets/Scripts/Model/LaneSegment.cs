@@ -9,11 +9,11 @@ public class LaneSegment
     // The centreline is the line from the start to the end of the lane
     public Line centreLine { get; private set; }
     // If reverse is true it means the lane is from the end of the second point on the line to the first
-    private bool reverse;
+    public bool isReverse { get; private set; }
 
-    public LaneSegment(Line centreLineIn, bool reverseIn) {
+    public LaneSegment(Line centreLineIn, bool isReverseIn) {
         centreLine = centreLineIn;
-        reverse = reverseIn;
+        isReverse = isReverseIn;
     }
 
     // The edge of a lane is the line marking it, so half a lane width away from the centre

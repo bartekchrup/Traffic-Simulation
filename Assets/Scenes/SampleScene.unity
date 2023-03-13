@@ -1550,6 +1550,7 @@ GameObject:
   m_Component:
   - component: {fileID: 886940391}
   - component: {fileID: 886940390}
+  - component: {fileID: 886940392}
   m_Layer: 0
   m_Name: ConnectorTool
   m_TagString: Untagged
@@ -1570,12 +1571,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roadSegmentManager: {fileID: 855628752}
-  roadEndMarkerPrefab: {fileID: 5267832131422777247, guid: d399875ec1aa8f44d9d023b9ed8d98d5, type: 3}
+  roadEndMarkerPrefab: {fileID: 5267832131422777244, guid: d399875ec1aa8f44d9d023b9ed8d98d5, type: 3}
   statusBarManager: {fileID: 1485623077}
   backgroundManager: {fileID: 870260449}
   connectButtonText: {fileID: 561444087}
   drawButton: {fileID: 1508374413}
   solidLinePrefab: {fileID: 8851981893765490005, guid: 08f0113cc1b7e5b4381fa9ba0d4decbc, type: 3}
+  connectLanesScript: {fileID: 886940392}
 --- !u!4 &886940391
 Transform:
   m_ObjectHideFlags: 0
@@ -1591,6 +1593,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &886940392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886940389}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3c37352a221e5a479e4d6fad341fa58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectRoadsScript: {fileID: 886940390}
+  laneMarkerPrefab: {fileID: 5234522086087294979, guid: 1ef813d6de30cfe488432e148a000925, type: 3}
 --- !u!1 &991846339
 GameObject:
   m_ObjectHideFlags: 0

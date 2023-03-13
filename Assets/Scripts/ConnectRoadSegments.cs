@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
-
+using System;
 
 public class ConnectRoadSegments : MonoBehaviour
 {
@@ -13,7 +13,7 @@ public class ConnectRoadSegments : MonoBehaviour
     // To get the road segments in the scene
     [SerializeField] private NewRoadDrawManager roadSegmentManager;
     // Spawns a circle on the end of roads to be used for selection
-    [SerializeField] private GameObject roadEndMarkerPrefab;
+    [SerializeField] private RoadEndMarkerManager roadEndMarkerPrefab;
     // For updating status
     [SerializeField] private StatusBarManager statusBarManager;
     // For changing background color while connecting
@@ -24,8 +24,11 @@ public class ConnectRoadSegments : MonoBehaviour
     [SerializeField] private GameObject drawButton;
     // To draw connections between road segments
     [SerializeField] private LineDrawer solidLinePrefab;
+    // To start connecting lanes after intersection is made
+    [SerializeField] private ConnectLanes connectLanesScript;
 
-    private List<GameObject> roadEndMarkers = new List<GameObject>();
+    private List<RoadEndMarkerManager> roadEndMarkers = new List<RoadEndMarkerManager>();
+    private List<RoadNode> nodesInIntersection = new List<RoadNode>();
 
     void OnEnable() {
         // Removes draw button, updates status text and bg color
@@ -37,27 +40,25 @@ public class ConnectRoadSegments : MonoBehaviour
             Vector2[] roadEndpoints = road.GetRoadCentreLine().GetPoints();
             for (int i = 0; i < roadEndpoints.Length; i++) {
                 // Spawn prefab
-                GameObject newMarkerInstance = Instantiate(roadEndMarkerPrefab);
-                RoadEndMarkerManager markerManager = newMarkerInstance.GetComponent<RoadEndMarkerManager>();
-                // The road marker will know who its parent is, and what end of the road it's on
-                markerManager.SetRoad(road, i);
-                newMarkerInstance.transform.position = roadEndpoints[i];
+                RoadEndMarkerManager newMarkerManager = Instantiate(roadEndMarkerPrefab);
+                // The road marker will know what road it relates to and which end of the road
+                newMarkerManager.SetRoad(road, i);
+                newMarkerManager.transform.position = roadEndpoints[i];
                 // Adds the road end marker to list of all markers for destruction later
-                roadEndMarkers.Add(newMarkerInstance);
+                roadEndMarkers.Add(newMarkerManager);
             }
         }
     }
 
     void OnDisable() {
-        // Restores ui to how it was before connecting
-        restoreUI();
         // Create data structure for finding lines to draw
         List<List<Vector2>> roadCorners = new List<List<Vector2>>();
-        foreach (GameObject roadEndMarker in roadEndMarkers) {
-            RoadEndMarkerManager markerManager = roadEndMarker.GetComponent<RoadEndMarkerManager>();
+        
+        foreach (RoadEndMarkerManager markerManager in roadEndMarkers) {
             // Only consider roads that have been selected for connection
             if (markerManager.IsSelected()) {
                 RoadNode roadNode = markerManager.roadNode;
+                nodesInIntersection.Add(roadNode);
                 roadCorners.Add(roadNode.GetNodeEdgeCoordinates());
             }
         }
@@ -65,12 +66,18 @@ public class ConnectRoadSegments : MonoBehaviour
         // Only draw connections if more than one road is selected
         if (roadCorners.Count > 0) {
             drawConnections(roadCorners);
-
         }
         
+        // Restores ui to how it was before connecting
+        restoreUI();
         // Remove old markers
         roadEndMarkers.Clear();
+        
+        connectLanesScript.enabled = true;
+    }
 
+    public List<RoadNode> GetNodesInIntersection() {
+        return nodesInIntersection;
     }
 
     private void drawConnections(List<List<Vector2>> roadCorners) {
@@ -128,8 +135,8 @@ public class ConnectRoadSegments : MonoBehaviour
         connectButtonText.text = IDLE_TEXT;
         drawButton.SetActive(true);
         // Remove the ui node markers
-        foreach (GameObject roadEndMarker in roadEndMarkers) {
-            Destroy(roadEndMarker);
+        foreach (RoadEndMarkerManager roadEndMarker in roadEndMarkers) {
+            roadEndMarker.Destroy();
         }
     }
 
