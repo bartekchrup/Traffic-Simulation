@@ -67,7 +67,7 @@ public class ConnectLanes : MonoBehaviour
         LaneMarkerManager newLaneMarkerManager = Instantiate(laneMarkerPrefab);
         // Assigns the marker to a lane and which end of that lane 0 or 1
         int roadEndIndex = intersectionNodes[nodeIndex].roadEndIndex;
-        newLaneMarkerManager.SetLane(lane, roadEndIndex);
+        newLaneMarkerManager.SetLaneNode(lane.GetLaneNode(roadEndIndex));
         // Reuses colors if intersection has more than 5 incoming roads
         newLaneMarkerManager.SetColor(LANE_COLORS[nodeIndex % LANE_COLORS.Length]);
         return newLaneMarkerManager;
@@ -91,19 +91,21 @@ public class ConnectLanes : MonoBehaviour
         Line startLaneLine = selectedStartMarker.GetLaneLine();
         Line endLaneLine = endLaneMarker.GetLaneLine();
         Vector2 startPoint = selectedStartMarker.gameObject.transform.position;
-        Vector2 controlPoint;
-        try
-        {
-        controlPoint = Line.Intersection(startLaneLine, endLaneLine);
-        }
-        catch (System.Exception)
-        {
-            Debug.Log("Lines are parallel");
-            controlPoint = selectedStartMarker.gameObject.transform.position;
-        }
+        // Vector2 controlPoint;
+        // try
+        // {
+        // controlPoint = Line.Intersection(startLaneLine, endLaneLine);
+        // }
+        // catch (System.Exception)
+        // {
+        //     Debug.Log("Lines are parallel");
+        //     controlPoint = selectedStartMarker.gameObject.transform.position;
+        // }
+        Vector2 controlPoint1 = selectedStartMarker.LaneNode.GetControlPoint();
+        Vector2 controlPoint2 = endLaneMarker.LaneNode.GetControlPoint();
         Vector2 endPoint = endLaneMarker.gameObject.transform.position;
         BezierCurveDrawer lineManager = Instantiate(bezierLinePrefab);
-        lineManager.SetPoints(startPoint, controlPoint, endPoint);
+        lineManager.SetPoints(startPoint, controlPoint1, controlPoint2, endPoint);
         lineManager.SetColor(selectedStartMarker.GetColor());
     }
 

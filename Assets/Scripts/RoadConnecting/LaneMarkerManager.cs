@@ -7,16 +7,16 @@ public class LaneMarkerManager : MonoBehaviour, IPointerClickHandler, IPointerEn
 {
     private const float HOVER_SCALE_FACTOR = 1.4f;
 
-    private LaneSegment lane;
-    // The end of the lane on which the marker is on. 0 is first point
-    private int laneEndIndex;
+    public LaneNode LaneNode { get; private set; }
+
     private bool isMarkerClicked;
+    
 
     // Assign the marker to a lane and move it there
-    public void SetLane(LaneSegment laneIn, int laneEndIndexIn) {
-        lane = laneIn;
-        laneEndIndex = laneEndIndexIn;
-        transform.position = lane.centreLine.GetPoint(laneEndIndex);
+    public void SetLaneNode(LaneNode laneNodeIn) {
+        LaneNode = laneNodeIn;
+
+        transform.position = LaneNode.lane.centreLine.GetPoint(LaneNode.laneEndIndex);
     }
 
     void OnEnable() {
@@ -28,7 +28,7 @@ public class LaneMarkerManager : MonoBehaviour, IPointerClickHandler, IPointerEn
     }
 
     public Line GetLaneLine() {
-        return lane.centreLine;
+        return LaneNode.lane.centreLine;
     }
 
     public void SetColor(Color color) {

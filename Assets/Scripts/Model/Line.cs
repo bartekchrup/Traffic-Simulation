@@ -17,23 +17,23 @@ public class Line
 
     // Returns the point where the two lines intersect
     // Equation from https://stackoverflow.com/questions/4543506/algorithm-for-intersection-of-2-lines
-    public static Vector2 Intersection(Line l1, Line l2) {
-        float[] coefficients1 = l1.GetLineEquation();
-        float[] coefficients2 = l2.GetLineEquation();
-        float A1 = coefficients1[0];
-        float C1 = coefficients1[1];
-        float A2 = coefficients2[0];
-        float C2 = coefficients2[1];
-        float delta = A1 - A2;
+    // public static Vector2 Intersection(Line l1, Line l2) {
+    //     float[] coefficients1 = l1.GetLineEquation();
+    //     float[] coefficients2 = l2.GetLineEquation();
+    //     float A1 = coefficients1[0];
+    //     float C1 = coefficients1[1];
+    //     float A2 = coefficients2[0];
+    //     float C2 = coefficients2[1];
+    //     float delta = A1 - A2;
 
-        if (delta == 0) {
-            throw new ArgumentException("Lines never intersect");
-        }
+    //     if (delta == 0) {
+    //         throw new ArgumentException("Lines never intersect");
+    //     }
 
-        float x = (C1 - C2) / delta;
-        float y = (A1 * C2 - A2 * C1) / delta;
-        return new Vector2(x, y);
-    }
+    //     float x = (C1 - C2) / delta;
+    //     float y = (A1 * C2 - A2 * C1) / delta;
+    //     return new Vector2(x, y);
+    // }
 
     // Returns an array of floats A, C corresponding to the line equation in the form Ax + By = C
     // B is always 1
