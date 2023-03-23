@@ -1607,6 +1607,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   connectRoadsScript: {fileID: 886940390}
   laneMarkerPrefab: {fileID: 5234522086087294979, guid: 1ef813d6de30cfe488432e148a000925, type: 3}
+  bezierLinePrefab: {fileID: -2918070187513465458, guid: 24e5591f12f8c7c46a976e8fdf442f5a, type: 3}
 --- !u!1 &991846339
 GameObject:
   m_ObjectHideFlags: 0
