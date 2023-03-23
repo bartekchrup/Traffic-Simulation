@@ -8,8 +8,6 @@ public class RoadNode
     private RoadSegment road;
     // which end of the road
     public int roadEndIndex { get; private set; }
-    // Connections from this node to other road nodes
-    RoadConnection roadConnections;
 
     public RoadNode(RoadSegment roadIn, int roadSideIndexIn) {
         road = roadIn;
