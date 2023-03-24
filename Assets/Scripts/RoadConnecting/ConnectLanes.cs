@@ -5,7 +5,11 @@ using UnityEditor;
 
 public class ConnectLanes : MonoBehaviour
 {
-    private Color[] LANE_COLORS = new Color[] {Color.yellow, Color.red, Color.green, Color.magenta, Color.cyan};
+    private static readonly Color[] LANE_COLORS = new Color[] {Color.yellow, Color.red, Color.green, Color.magenta, Color.cyan};
+    // The distance of the tangent point is calculated as
+    // the distance between the start and end of the line multiplied by this
+    // Higher numbers usuall result in smoother, longer lines
+    private static readonly float TANGENT_DISTANCE_MULTIPLIER = 0.4f;
     // To get nodes (roads) in intersection
     [SerializeField] private ConnectRoadSegments connectRoadsScript;
     [SerializeField] private LaneMarkerManager laneMarkerPrefab;
@@ -21,10 +25,10 @@ public class ConnectLanes : MonoBehaviour
     private BezierCurveDrawer selectingBezier;
     private List<BezierCurveDrawer> connectedBeziersList;
 
-    // Start is called before the first frame update
+    // Set up the line for connecting lane nodes
     void Start()
     {
-        
+        selectingBezier = Instantiate(bezierLinePrefab);
     }
 
     // Update is called once per frame
@@ -40,15 +44,29 @@ public class ConnectLanes : MonoBehaviour
             }
         // Selecting exit markers
         } else {
-            Vector2 startPoint = selectedStartMarker.GetPosition();
-            Vector2 startTangent = selectedStartMarker.LaneNode.GetControlPoint();
-            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            selectingBezier.SetPoints(startPoint, startTangent, mouseWorldPos, mouseWorldPos);
+            updateSelectingBezier();
+            // Check exit markers if they have been clicked
             foreach (LaneMarkerManager marker in exitLaneMarkers) {
                 if (marker.HasBeenClicked()) {
                     exitMarkerClicked(marker);
                 }
             }
+            // If user has right clicked: deselect entry marker
+            if (Input.GetMouseButtonDown(1)) {
+                showEntryMarkers();
+            }
+        }
+    }
+
+    // Updates the exit point of the selectingBezier to the mouse pos 
+    private void updateSelectingBezier() {
+        if (selectedStartMarker != null) {
+            Vector2 startPoint = selectedStartMarker.GetPosition();
+            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            float tangentDistance = Vector2.Distance(startPoint, mouseWorldPos);
+            Vector2 startTangent = selectedStartMarker.LaneNode.GetControlPoint(tangentDistance);
+            selectingBezier.SetPoints(startPoint, startTangent, mouseWorldPos, mouseWorldPos);
+
         }
     }
 
@@ -88,8 +106,8 @@ public class ConnectLanes : MonoBehaviour
     // When a selection is started a bezier line is set up
     private void enterMarkerClicked(LaneMarkerManager marker) {
         selectedStartMarker = marker;
-        selectingBezier = Instantiate(bezierLinePrefab);
         selectingBezier.SetColor(marker.GetColor());
+        selectingBezier.gameObject.SetActive(true);
     }
 
     // When a lane connection is completed, the line connecting them is drawn
@@ -115,10 +133,16 @@ public class ConnectLanes : MonoBehaviour
 
     // Draws a cubic bazier line using two given lane end markers
     private void drawBezierBetweenMarkers(LaneMarkerManager startMarker, LaneMarkerManager endMarker) {
+        if (startMarker == null || endMarker == null) {
+            Debug.LogError("One of the markers is null");
+            return;
+        }
         Vector2 startPoint = startMarker.GetPosition();
-        Vector2 startTangent = startMarker.LaneNode.GetControlPoint();
-        Vector2 endTangent = endMarker.LaneNode.GetControlPoint();
         Vector2 endPoint = endMarker.GetPosition();
+        // The distance of the 2nd and 3rd control points on the bezier line varies with distance between the start and end
+        float tangentDistance = Vector2.Distance(startPoint, endPoint) * TANGENT_DISTANCE_MULTIPLIER;
+        Vector2 startTangent = startMarker.LaneNode.GetControlPoint(tangentDistance);
+        Vector2 endTangent = endMarker.LaneNode.GetControlPoint(tangentDistance);
 
         BezierCurveDrawer lineManager = Instantiate(bezierLinePrefab);
         lineManager.SetPoints(startPoint, startTangent, endTangent, endPoint);
@@ -126,14 +150,6 @@ public class ConnectLanes : MonoBehaviour
         connectedBeziersList.Add(lineManager);
     }
 
-    private void showExitMarkers() {
-        showingExitMarkers = true;
-        // Enable all exit markers
-        foreach (LaneMarkerManager marker in exitLaneMarkers) {
-            marker.gameObject.SetActive(true);
-        }
-        hideEnterMarkers();
-    }
 
     // Generate exit markers but keep them disabled
     private void setUpExitMarkers() {
@@ -148,10 +164,23 @@ public class ConnectLanes : MonoBehaviour
         }
     }
 
-    // Disables every marker entering the intersection
-    private void hideEnterMarkers() {
-        foreach (LaneMarkerManager marker in enterLaneMarkers) {
-            marker.gameObject.SetActive(false);
-        }
+    // Switches to the mode showing exit markers, used after an entry marker is selected
+    private void showExitMarkers() {
+        showingExitMarkers = true;
+        // Disables every marker entering the intersection and enables exit markers
+        enterLaneMarkers.ForEach(marker => marker.gameObject.SetActive(false));
+        exitLaneMarkers.ForEach(marker => marker.gameObject.SetActive(true));
+    }
+
+    // Switches back to showing entry markers by hiding the exit markers
+    private void showEntryMarkers() {
+        showingExitMarkers = false;
+        selectedStartMarker = null;
+        // Hide selecting line (no entry node is selected)
+        selectingBezier.gameObject.SetActive(false);
+
+        // Activate all entry markers and disable exit markers
+        exitLaneMarkers.ForEach(marker => marker.gameObject.SetActive(false));
+        enterLaneMarkers.ForEach(marker => marker.gameObject.SetActive(true));
     }
 }
