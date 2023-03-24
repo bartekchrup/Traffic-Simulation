@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LaneNode
 {
-    private static readonly float RAY_POINT_DISTANCE = 3f;
+    private static readonly float RAY_POINT_DISTANCE = 2f;
     // Properties
     public LaneSegment lane { get; private set; }
     // which end of the road

@@ -31,6 +31,10 @@ public class LaneMarkerManager : MonoBehaviour, IPointerClickHandler, IPointerEn
         return LaneNode.lane.centreLine;
     }
 
+    public Vector2 GetPosition() {
+        return transform.position;
+    }
+
     public void SetColor(Color color) {
         GetComponent<SpriteRenderer>().color = color;
     }

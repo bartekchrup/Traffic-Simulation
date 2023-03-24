@@ -22,7 +22,6 @@ public class RoadEndMarkerManager : MonoBehaviour, IPointerClickHandler, IPointe
     public void OnPointerClick(PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Left) {
             isSelected = !isSelected;
-            Debug.Log("This marker is now " + (isSelected? "selected" : "unselected"));
             if (isSelected) {
                 this.GetComponentInChildren<SpriteRenderer>().color = Color.green;
             } else {

@@ -18,6 +18,9 @@ public class ConnectLanes : MonoBehaviour
 
     private LaneMarkerManager selectedStartMarker;
 
+    private BezierCurveDrawer selectingBezier;
+    private List<BezierCurveDrawer> connectedBeziersList;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +40,10 @@ public class ConnectLanes : MonoBehaviour
             }
         // Selecting exit markers
         } else {
+            Vector2 startPoint = selectedStartMarker.GetPosition();
+            Vector2 startTangent = selectedStartMarker.LaneNode.GetControlPoint();
+            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            selectingBezier.SetPoints(startPoint, startTangent, mouseWorldPos, mouseWorldPos);
             foreach (LaneMarkerManager marker in exitLaneMarkers) {
                 if (marker.HasBeenClicked()) {
                     exitMarkerClicked(marker);
@@ -50,6 +57,7 @@ public class ConnectLanes : MonoBehaviour
         showingExitMarkers = false;
         enterLaneMarkers = new List<LaneMarkerManager>();
         exitLaneMarkers = new List<LaneMarkerManager>();
+        connectedBeziersList = new List<BezierCurveDrawer>();
         intersectionNodes = connectRoadsScript.GetNodesInIntersection();
         // For each road in intersection, for each lane entering: create a lane marker
         for (int nodeIndex = 0; nodeIndex < intersectionNodes.Count; nodeIndex++) {
@@ -77,36 +85,45 @@ public class ConnectLanes : MonoBehaviour
 
     }
 
+    // When a selection is started a bezier line is set up
     private void enterMarkerClicked(LaneMarkerManager marker) {
         selectedStartMarker = marker;
-        
+        selectingBezier = Instantiate(bezierLinePrefab);
+        selectingBezier.SetColor(marker.GetColor());
     }
 
-    private void exitMarkerClicked(LaneMarkerManager marker) {
-        marker.ResetMarker();
-        drawBezier(marker);
+    // When a lane connection is completed, the line connecting them is drawn
+    private void exitMarkerClicked(LaneMarkerManager clickedMarker) {
+        clickedMarker.ResetMarker();
+        bool removedLine = false;
+        // Loop through all lines backwards because removing
+        for (int i = connectedBeziersList.Count -1; i >= 0; i--) {
+            BezierCurveDrawer line = connectedBeziersList[i];
+            // If this line has already been drawn
+            Debug.Log(clickedMarker.GetPosition() + " " + line.endPoint);
+            if (clickedMarker.GetPosition() == line.endPoint && selectedStartMarker.GetPosition() == line.startPoint) {
+                connectedBeziersList.RemoveAt(i);
+                Destroy(line.gameObject);
+                removedLine = true;
+            }
+        }
+        // Only draw a line if line wasnt already present
+        if (!removedLine) {
+            drawBezierBetweenMarkers(selectedStartMarker, clickedMarker);
+        }
     }
 
-    private void drawBezier(LaneMarkerManager endLaneMarker) {
-        Line startLaneLine = selectedStartMarker.GetLaneLine();
-        Line endLaneLine = endLaneMarker.GetLaneLine();
-        Vector2 startPoint = selectedStartMarker.gameObject.transform.position;
-        // Vector2 controlPoint;
-        // try
-        // {
-        // controlPoint = Line.Intersection(startLaneLine, endLaneLine);
-        // }
-        // catch (System.Exception)
-        // {
-        //     Debug.Log("Lines are parallel");
-        //     controlPoint = selectedStartMarker.gameObject.transform.position;
-        // }
-        Vector2 controlPoint1 = selectedStartMarker.LaneNode.GetControlPoint();
-        Vector2 controlPoint2 = endLaneMarker.LaneNode.GetControlPoint();
-        Vector2 endPoint = endLaneMarker.gameObject.transform.position;
+    // Draws a cubic bazier line using two given lane end markers
+    private void drawBezierBetweenMarkers(LaneMarkerManager startMarker, LaneMarkerManager endMarker) {
+        Vector2 startPoint = startMarker.GetPosition();
+        Vector2 startTangent = startMarker.LaneNode.GetControlPoint();
+        Vector2 endTangent = endMarker.LaneNode.GetControlPoint();
+        Vector2 endPoint = endMarker.GetPosition();
+
         BezierCurveDrawer lineManager = Instantiate(bezierLinePrefab);
-        lineManager.SetPoints(startPoint, controlPoint1, controlPoint2, endPoint);
-        lineManager.SetColor(selectedStartMarker.GetColor());
+        lineManager.SetPoints(startPoint, startTangent, endTangent, endPoint);
+        lineManager.SetColor(startMarker.GetColor());
+        connectedBeziersList.Add(lineManager);
     }
 
     private void showExitMarkers() {
