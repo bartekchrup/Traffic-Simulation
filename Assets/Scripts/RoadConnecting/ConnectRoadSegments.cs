@@ -38,14 +38,17 @@ public class ConnectRoadSegments : MonoBehaviour
         foreach (RoadSegment road in roadSegments) {
 
             Vector2[] roadEndpoints = road.GetRoadCentreLine().GetPoints();
-            for (int i = 0; i < roadEndpoints.Length; i++) {
-                // Spawn prefab
-                RoadEndMarkerManager newMarkerManager = Instantiate(roadEndMarkerPrefab);
-                // The road marker will know what road it relates to and which end of the road
-                newMarkerManager.SetRoad(road, i);
-                newMarkerManager.transform.position = roadEndpoints[i];
-                // Adds the road end marker to list of all markers for destruction later
-                roadEndMarkers.Add(newMarkerManager);
+            RoadNode[] roadNodes = road.roadNodes;
+            foreach (RoadNode roadNode in roadNodes) {
+                // Show marker if road is not already in an intersection
+                if (!roadNode.IsInIntersection) {
+                    // Spawn prefab
+                    RoadEndMarkerManager newMarkerManager = Instantiate(roadEndMarkerPrefab);
+                    newMarkerManager.SetRoadNode(roadNode);
+                    newMarkerManager.transform.position = roadNode.GetPosition();
+                    // Adds the road end marker to list of all markers for destruction later
+                    roadEndMarkers.Add(newMarkerManager);
+                }
             }
         }
     }
@@ -58,13 +61,14 @@ public class ConnectRoadSegments : MonoBehaviour
             // Only consider roads that have been selected for connection
             if (markerManager.IsSelected()) {
                 RoadNode roadNode = markerManager.roadNode;
+                roadNode.IsInIntersection = true;
                 nodesInIntersection.Add(roadNode);
                 roadCorners.Add(roadNode.GetNodeEdgeCoordinates());
             }
         }
 
         // Only draw connections if more than one road is selected
-        if (roadCorners.Count > 0) {
+        if (roadCorners.Count > 1) {
             drawConnections(roadCorners);
         }
         
@@ -81,7 +85,6 @@ public class ConnectRoadSegments : MonoBehaviour
     }
 
     private void drawConnections(List<List<Vector2>> roadCorners) {
-        Debug.Log("Number of roads: " + roadCorners.Count);
         // A set for storing the points which still need to have a line drawn from
         HashSet<Vector2> pointsToDraw = roadCorners.SelectMany(list => list).ToHashSet();
         foreach (List<Vector2> road in roadCorners) {

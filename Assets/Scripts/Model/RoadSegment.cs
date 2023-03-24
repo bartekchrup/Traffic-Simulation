@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RoadSegment
 {
+    public RoadNode[] roadNodes { get; private set; }
+    
     private int fwdLanes;
     private int revLanes;
 
@@ -11,7 +13,6 @@ public class RoadSegment
     private bool leftHandDrive;
     private LaneSegment[] lanes;
 
-    private RoadNode[] roadNodes;
 
     public RoadSegment(Line roadCentreLineIn, int fwdLanesIn, int revLanesIn, bool leftHandDriveIn) {
         roadCentreLine = roadCentreLineIn;

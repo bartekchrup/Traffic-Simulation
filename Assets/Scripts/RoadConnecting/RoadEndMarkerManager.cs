@@ -10,8 +10,8 @@ public class RoadEndMarkerManager : MonoBehaviour, IPointerClickHandler, IPointe
     public RoadNode roadNode { get; private set; }
     private bool isSelected = false;
 
-    public void SetRoad(RoadSegment road, int roadEndIndex) {
-        roadNode = road.GetRoadNode(roadEndIndex);
+    public void SetRoadNode(RoadNode roadNodeIn) {
+        roadNode = roadNodeIn;
     }
 
     public bool IsSelected() {

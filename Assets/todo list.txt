@@ -1,0 +1,3 @@
+select only 1 road when making intersection
+markers getting bigger from animation
+status panel

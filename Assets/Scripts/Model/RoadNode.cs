@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class RoadNode
 {
-    // Properties
     private RoadSegment road;
     // which end of the road
     public int roadEndIndex { get; private set; }
+    public bool IsInIntersection = false;
 
     public RoadNode(RoadSegment roadIn, int roadSideIndexIn) {
         road = roadIn;
         roadEndIndex = roadSideIndexIn;
+    }
+
+    public Vector2 GetPosition() {
+        return road.GetRoadCentreLine().GetPoint(roadEndIndex);
     }
 
     public List<Vector2> GetNodeEdgeCoordinates() {
