@@ -6,9 +6,14 @@ using UnityEngine.EventSystems;
 
 public class RoadEndMarkerManager : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    private static readonly Vector3 ROAD_END_MARKER_SIZE = new Vector3(0.3f, 0.3f, 0.3f);
     private const float HOVER_SCALE_FACTOR = 1.4f;
     public RoadNode roadNode { get; private set; }
     private bool isSelected = false;
+
+    void OnEnable() {
+        transform.localScale = ROAD_END_MARKER_SIZE;
+    }
 
     public void SetRoadNode(RoadNode roadNodeIn) {
         roadNode = roadNodeIn;

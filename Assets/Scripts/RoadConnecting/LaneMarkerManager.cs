@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class LaneMarkerManager : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    private static readonly Vector3 LANE_MARKER_SIZE = new Vector3(0.2f, 0.2f, 0.2f);
     private const float HOVER_SCALE_FACTOR = 1.4f;
 
     public LaneNode LaneNode { get; private set; }
@@ -21,6 +22,8 @@ public class LaneMarkerManager : MonoBehaviour, IPointerClickHandler, IPointerEn
 
     void OnEnable() {
         isMarkerClicked = false;
+        // Reset marker size
+        transform.localScale = LANE_MARKER_SIZE;
     }
 
     void OnDisable() {
