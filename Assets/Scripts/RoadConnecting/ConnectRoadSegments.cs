@@ -126,7 +126,7 @@ public class ConnectRoadSegments : MonoBehaviour
     }
 
     private void updateUIConnecting() {
-        statusBarManager.SetTextConnecting();
+        statusBarManager.SetTextRoadConnecting();
         backgroundManager.DarkenBackground();
         connectButtonText.text = CONNECTING_TEXT;
         drawButton.SetActive(false);

@@ -14,11 +14,13 @@ public class ConnectLanes : MonoBehaviour
     [SerializeField] private ConnectRoadSegments connectRoadsScript;
     [SerializeField] private LaneMarkerManager laneMarkerPrefab;
     [SerializeField] private BezierCurveDrawer bezierLinePrefab;
+    // To update state
+    [SerializeField] private StatusBarManager statusBarManager;
 
     private List<RoadNode> intersectionNodes;
     private List<LaneMarkerManager> enterLaneMarkers;
-    private bool showingExitMarkers;
     private List<LaneMarkerManager> exitLaneMarkers;
+    private bool showingExitMarkers;
 
     private LaneMarkerManager selectedStartMarker;
 
@@ -26,7 +28,7 @@ public class ConnectLanes : MonoBehaviour
     private List<BezierCurveDrawer> connectedBeziersList;
 
     // Set up the line for connecting lane nodes
-    void Start()
+    void Awake()
     {
         selectingBezier = Instantiate(bezierLinePrefab);
     }
@@ -39,8 +41,10 @@ public class ConnectLanes : MonoBehaviour
             foreach (LaneMarkerManager marker in enterLaneMarkers) {
                 if (marker.HasBeenClicked()) {
                     enterMarkerClicked(marker);
-                    showExitMarkers();
                 }
+            }
+            if (Input.GetMouseButtonDown(1)) {
+                leaveMode();
             }
         // Selecting exit markers
         } else {
@@ -86,6 +90,7 @@ public class ConnectLanes : MonoBehaviour
             }
         }
         setUpExitMarkers();
+        showEntryMarkers();
     }
 
     // Instantiates a marker based on a RoadNode, which lane on that road
@@ -108,6 +113,7 @@ public class ConnectLanes : MonoBehaviour
         selectedStartMarker = marker;
         selectingBezier.SetColor(marker.GetColor());
         selectingBezier.gameObject.SetActive(true);
+        showExitMarkers();
     }
 
     // When a lane connection is completed, the line connecting them is drawn
@@ -166,7 +172,9 @@ public class ConnectLanes : MonoBehaviour
 
     // Switches to the mode showing exit markers, used after an entry marker is selected
     private void showExitMarkers() {
+        statusBarManager.SetTextConnectingExit();
         showingExitMarkers = true;
+        selectingBezier.gameObject.SetActive(true);
         // Disables every marker entering the intersection and enables exit markers
         enterLaneMarkers.ForEach(marker => marker.gameObject.SetActive(false));
         exitLaneMarkers.ForEach(marker => marker.gameObject.SetActive(true));
@@ -174,6 +182,7 @@ public class ConnectLanes : MonoBehaviour
 
     // Switches back to showing entry markers by hiding the exit markers
     private void showEntryMarkers() {
+        statusBarManager.SetTextConnectingEntry();
         showingExitMarkers = false;
         selectedStartMarker = null;
         // Hide selecting line (no entry node is selected)
@@ -182,5 +191,16 @@ public class ConnectLanes : MonoBehaviour
         // Activate all entry markers and disable exit markers
         exitLaneMarkers.ForEach(marker => marker.gameObject.SetActive(false));
         enterLaneMarkers.ForEach(marker => marker.gameObject.SetActive(true));
+    }
+
+    private void leaveMode() {
+        statusBarManager.SetTextIdle();
+        // Delete markers
+        enterLaneMarkers.ForEach(marker => Destroy(marker.gameObject));
+        exitLaneMarkers.ForEach(marker => Destroy(marker.gameObject));
+        connectedBeziersList.ForEach(line => Destroy(line.gameObject));
+        selectingBezier.gameObject.SetActive(false);
+        enabled = false;
+
     }
 }
