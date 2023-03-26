@@ -5,7 +5,8 @@ using TMPro;
 
 public class NewRoadDrawManager : MonoBehaviour
 {
-    [SerializeField] private Settings userSettings;
+    // Stores the road segments and intersections in the network
+    [SerializeField] private RoadNetworkManager roadNetworkManager;
     [SerializeField] TMP_InputField fwdInputField;
     [SerializeField] TMP_InputField revInputField;
 
@@ -15,16 +16,8 @@ public class NewRoadDrawManager : MonoBehaviour
     [SerializeField] private float roadDividorLinesSeperation;
     [SerializeField] private float roadDividorLineWidth;
 
-    bool leftHandDrive;
-
-    private List<RoadSegment> roadSegments = new List<RoadSegment>();
     private int fwdLanesNumber;
     private int revLanesNumber;
-
-    void Awake()
-    {
-        leftHandDrive = userSettings.LeftHandDrive;
-    }
 
     public void AddNewRoad(Line roadCentreLine) {
         // If the number of lanes on the road selected is invalid, return.
@@ -32,15 +25,11 @@ public class NewRoadDrawManager : MonoBehaviour
             return;
         }
 
-        RoadSegment newRoad = new RoadSegment(roadCentreLine, fwdLanesNumber, revLanesNumber, leftHandDrive);
-        roadSegments.Add(newRoad);
+        RoadSegment newRoad = new RoadSegment(roadCentreLine, fwdLanesNumber, revLanesNumber);
+        roadNetworkManager.AddRoad(newRoad);
         drawRoadEdges(newRoad);
         drawRoadDividor(newRoad);
         drawLaneMarkings(newRoad);
-    }
-
-    public List<RoadSegment> GetRoadSegments() {
-        return roadSegments;
     }
 
     private void drawRoadEdges(RoadSegment road) {

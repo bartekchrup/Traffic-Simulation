@@ -7,12 +7,12 @@ public class NewRoadSelectionTool : MonoBehaviour
 {
     [SerializeField] private LineDrawer linePrefab;
     [SerializeField] private GameObject selectionCircle;
-    [SerializeField] private Settings userSettings;
     [SerializeField] private NewRoadDrawManager roadDrawer;
     // For updating status bar
     [SerializeField] private StatusBarManager statusBarManager;
 
-    private float gridSize;
+    [SerializeField] private UIFlowManager flowManager;
+
     private Camera cam;
 
     private bool drawingLine;
@@ -25,7 +25,6 @@ public class NewRoadSelectionTool : MonoBehaviour
     // Instantiate variables
     void Awake()
     {
-        gridSize = userSettings.GridSize;
         cam = Camera.main;
         drawingLine = false;
         instantiantedLine = Instantiate(linePrefab);
@@ -39,13 +38,14 @@ public class NewRoadSelectionTool : MonoBehaviour
 
     }
 
-    // Hide lines and circles when disabled
+    // Hide line and circles when disabled
     void OnDisable() {
         statusBarManager.SetTextIdle();
         instantiantedLine.gameObject.SetActive(false);
         Destroy(secondSelectionCircle.gameObject);
         Destroy(firstSelectionCircle.gameObject);
         drawingLine = false;
+        flowManager.SwitchIntersectionSelecting();
     }
 
     // Update is called once per frame
@@ -70,7 +70,8 @@ public class NewRoadSelectionTool : MonoBehaviour
                 roadCentreLine = new Line(instantiantedLine.GetLinePoints());
                 roadDrawer.AddNewRoad(roadCentreLine);
                 // Once the selection has been made the line is no longer displayed or updated
-                this.enabled = false;
+                enabled = false;
+                
             }
         }
         // Update the position of the 2nd point of the line when the mouse moves
@@ -86,6 +87,7 @@ public class NewRoadSelectionTool : MonoBehaviour
     // Helper functions
     private Vector2 roundToGrid(Vector2 coordinates) {
         Vector2 rounded;
+        float gridSize = Settings.GridSnapSize;
         rounded.x = (Mathf.Round(coordinates.x / gridSize)) * gridSize;
         rounded.y = (Mathf.Round(coordinates.y / gridSize)) * gridSize;
         return rounded;

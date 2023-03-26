@@ -8,7 +8,8 @@ public class LaneNode
     // which end of the road
     public int laneEndIndex { get; private set; }
 
-    private List<LaneNode> laneConnections = new List<LaneNode>();
+    // Set of other nodes this lane is connected to, no repeats
+    private HashSet<LaneNode> laneConnections = new HashSet<LaneNode>();
 
     public LaneNode(LaneSegment laneIn, int laneSideIndexIn) {
         lane = laneIn;
@@ -17,6 +18,10 @@ public class LaneNode
 
     public void ConnectLanes(LaneNode node) {
         laneConnections.Add(node);
+    }
+
+    public void UnConnectLanes(LaneNode node) {
+        laneConnections.Remove(node);
     }
 
     public Vector2 GetControlPoint(float distanceFromNode) {

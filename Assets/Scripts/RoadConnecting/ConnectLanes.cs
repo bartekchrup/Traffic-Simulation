@@ -1,21 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+using UnityEngine.Events;
 
 public class ConnectLanes : MonoBehaviour
 {
-    private static readonly Color[] LANE_COLORS = new Color[] {Color.yellow, Color.red, Color.green, Color.magenta, Color.cyan};
-    // The distance of the tangent point is calculated as
-    // the distance between the start and end of the line multiplied by this
-    // Higher numbers usuall result in smoother, longer lines
-    private static readonly float TANGENT_DISTANCE_MULTIPLIER = 0.4f;
-    // To get nodes (roads) in intersection
-    [SerializeField] private ConnectRoadSegments connectRoadsScript;
     [SerializeField] private LaneMarkerManager laneMarkerPrefab;
     [SerializeField] private BezierCurveDrawer bezierLinePrefab;
     // To update state
     [SerializeField] private StatusBarManager statusBarManager;
+    [SerializeField] private UIFlowManager flowManager;
 
     private List<RoadNode> intersectionNodes;
     private List<LaneMarkerManager> enterLaneMarkers;
@@ -44,7 +38,7 @@ public class ConnectLanes : MonoBehaviour
                 }
             }
             if (Input.GetMouseButtonDown(1)) {
-                leaveMode();
+                flowManager.SwitchIntersectionSelecting();
             }
         // Selecting exit markers
         } else {
@@ -74,13 +68,14 @@ public class ConnectLanes : MonoBehaviour
         }
     }
 
-    void OnEnable() {
+    public void StartConnecting(Intersection intersection) {
+        enabled = true;
         // At first only entry markers are show
         showingExitMarkers = false;
         enterLaneMarkers = new List<LaneMarkerManager>();
         exitLaneMarkers = new List<LaneMarkerManager>();
         connectedBeziersList = new List<BezierCurveDrawer>();
-        intersectionNodes = connectRoadsScript.GetNodesInIntersection();
+        intersectionNodes = intersection.GetNodes();
         // For each road in intersection, for each lane entering: create a lane marker
         for (int nodeIndex = 0; nodeIndex < intersectionNodes.Count; nodeIndex++) {
             List<LaneSegment> currentRoadLanes = intersectionNodes[nodeIndex].GetOutgoingLanes();
@@ -100,12 +95,19 @@ public class ConnectLanes : MonoBehaviour
         int roadEndIndex = intersectionNodes[nodeIndex].roadEndIndex;
         newLaneMarkerManager.SetLaneNode(lane.GetLaneNode(roadEndIndex));
         // Reuses colors if intersection has more than 5 incoming roads
-        newLaneMarkerManager.SetColor(LANE_COLORS[nodeIndex % LANE_COLORS.Length]);
+        Color[] colors = Settings.LANE_COLORS;
+        newLaneMarkerManager.SetColor(colors[nodeIndex % colors.Length]);
         return newLaneMarkerManager;
     }
 
     void OnDisable() {
-
+        statusBarManager.SetTextIdle();
+        // Delete markers
+        enterLaneMarkers.ForEach(marker => Destroy(marker.gameObject));
+        exitLaneMarkers.ForEach(marker => Destroy(marker.gameObject));
+        connectedBeziersList.ForEach(line => Destroy(line.gameObject));
+        selectingBezier.gameObject.SetActive(false);
+        enabled = false;
     }
 
     // When a selection is started a bezier line is set up
@@ -124,16 +126,17 @@ public class ConnectLanes : MonoBehaviour
         for (int i = connectedBeziersList.Count -1; i >= 0; i--) {
             BezierCurveDrawer line = connectedBeziersList[i];
             // If this line has already been drawn
-            Debug.Log(clickedMarker.GetPosition() + " " + line.endPoint);
             if (clickedMarker.GetPosition() == line.endPoint && selectedStartMarker.GetPosition() == line.startPoint) {
                 connectedBeziersList.RemoveAt(i);
                 Destroy(line.gameObject);
+                selectedStartMarker.LaneNode.UnConnectLanes(clickedMarker.LaneNode);
                 removedLine = true;
             }
         }
         // Only draw a line if line wasnt already present
         if (!removedLine) {
             drawBezierBetweenMarkers(selectedStartMarker, clickedMarker);
+            selectedStartMarker.LaneNode.ConnectLanes(clickedMarker.LaneNode);
         }
     }
 
@@ -146,7 +149,7 @@ public class ConnectLanes : MonoBehaviour
         Vector2 startPoint = startMarker.GetPosition();
         Vector2 endPoint = endMarker.GetPosition();
         // The distance of the 2nd and 3rd control points on the bezier line varies with distance between the start and end
-        float tangentDistance = Vector2.Distance(startPoint, endPoint) * TANGENT_DISTANCE_MULTIPLIER;
+        float tangentDistance = Vector2.Distance(startPoint, endPoint) * Settings.TANGENT_DISTANCE_MULTIPLIER;
         Vector2 startTangent = startMarker.LaneNode.GetControlPoint(tangentDistance);
         Vector2 endTangent = endMarker.LaneNode.GetControlPoint(tangentDistance);
 
@@ -193,14 +196,4 @@ public class ConnectLanes : MonoBehaviour
         enterLaneMarkers.ForEach(marker => marker.gameObject.SetActive(true));
     }
 
-    private void leaveMode() {
-        statusBarManager.SetTextIdle();
-        // Delete markers
-        enterLaneMarkers.ForEach(marker => Destroy(marker.gameObject));
-        exitLaneMarkers.ForEach(marker => Destroy(marker.gameObject));
-        connectedBeziersList.ForEach(line => Destroy(line.gameObject));
-        selectingBezier.gameObject.SetActive(false);
-        enabled = false;
-
-    }
 }

@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
-using System;
+using UnityEngine.Events;
 
 public class ConnectRoadSegments : MonoBehaviour
 {
     private const string IDLE_TEXT = "Connect";
     private const string CONNECTING_TEXT = "Make Connection";
 
-    // To get the road segments in the scene
-    [SerializeField] private NewRoadDrawManager roadSegmentManager;
+    // To get road segments and store created intersections
+    [SerializeField] private RoadNetworkManager roadNetworkManager;
     // Spawns a circle on the end of roads to be used for selection
     [SerializeField] private RoadEndMarkerManager roadEndMarkerPrefab;
     // For updating status
@@ -24,18 +24,20 @@ public class ConnectRoadSegments : MonoBehaviour
     [SerializeField] private GameObject drawButton;
     // To draw connections between road segments
     [SerializeField] private LineDrawer solidLinePrefab;
-    // To start connecting lanes after intersection is made
-    [SerializeField] private ConnectLanes connectLanesScript;
+    // To switch modes to connecting lanes after roads have been connected
+    [SerializeField] private UIFlowManager flowManager;
 
     private List<RoadEndMarkerManager> roadEndMarkers = new List<RoadEndMarkerManager>();
-    private List<RoadNode> nodesInIntersection = new List<RoadNode>();
+    private Intersection intersection;
 
     void OnEnable() {
+        Debug.Log("Enabling");
         // Removes draw button, updates status text and bg color
         updateUIConnecting();
 
-        List<RoadSegment> roadSegments = roadSegmentManager.GetRoadSegments();
-        foreach (RoadSegment road in roadSegments) {
+        intersection = new Intersection();
+        List<RoadSegment> allRoadSegments = roadNetworkManager.roads;
+        foreach (RoadSegment road in allRoadSegments) {
 
             Vector2[] roadEndpoints = road.GetRoadCentreLine().GetPoints();
             RoadNode[] roadNodes = road.roadNodes;
@@ -54,36 +56,43 @@ public class ConnectRoadSegments : MonoBehaviour
     }
 
     void OnDisable() {
-        // Create data structure for finding lines to draw
-        List<List<Vector2>> roadCorners = new List<List<Vector2>>();
-        
+        // Add each selected road to intersection list
         foreach (RoadEndMarkerManager markerManager in roadEndMarkers) {
-            // Only consider roads that have been selected for connection
             if (markerManager.IsSelected()) {
                 RoadNode roadNode = markerManager.roadNode;
-                roadNode.IsInIntersection = true;
-                nodesInIntersection.Add(roadNode);
-                roadCorners.Add(roadNode.GetNodeEdgeCoordinates());
+                intersection.AddNode(roadNode);
             }
         }
 
-        // Only draw connections if more than one road is selected
-        if (roadCorners.Count > 1) {
-            drawConnections(roadCorners);
+        // CREATING INTERSECTION (only done if >= 2 roads are selected)
+        if (intersection.GetNodes().Count > 1) {
+            createIntersection(intersection.GetNodes());
         }
         
         // Restores ui to how it was before connecting
         restoreUI();
-        // Remove old markers
+        // Remove markers
         roadEndMarkers.Clear();
+    }
+
+    // Create intersection and leave road connecting mode
+    private void createIntersection(List<RoadNode> nodes) {
+        // Create data structure for finding lines to draw
+        List<List<Vector2>> roadCorners = new List<List<Vector2>>();
+        foreach (RoadNode node in nodes) {
+            roadCorners.Add(node.GetNodeEdgeCoordinates());
+            // For each node in the inersection, make it not appear in connecting mode
+            node.IsInIntersection = true;
+        }
+        drawConnections(roadCorners);
         
-        connectLanesScript.enabled = true;
+        roadNetworkManager.AddIntersection(intersection);
+        
+        // Start connecting lanes
+        flowManager.SwitchLaneConnecting(intersection);
     }
 
-    public List<RoadNode> GetNodesInIntersection() {
-        return nodesInIntersection;
-    }
-
+    // Draws lines on the screen between road edges in an intersection to connect them
     private void drawConnections(List<List<Vector2>> roadCorners) {
         // A set for storing the points which still need to have a line drawn from
         HashSet<Vector2> pointsToDraw = roadCorners.SelectMany(list => list).ToHashSet();
@@ -133,6 +142,7 @@ public class ConnectRoadSegments : MonoBehaviour
     }
 
     private void restoreUI() {
+        Debug.Log("Disabling");
         statusBarManager.SetTextIdle();
         backgroundManager.ResetBackground();
         connectButtonText.text = IDLE_TEXT;

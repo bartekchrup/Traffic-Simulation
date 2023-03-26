@@ -10,21 +10,19 @@ public class RoadSegment
     private int revLanes;
 
     private Line roadCentreLine;
-    private bool leftHandDrive;
     private LaneSegment[] lanes;
 
 
-    public RoadSegment(Line roadCentreLineIn, int fwdLanesIn, int revLanesIn, bool leftHandDriveIn) {
+    public RoadSegment(Line roadCentreLineIn, int fwdLanesIn, int revLanesIn) {
         roadCentreLine = roadCentreLineIn;
         fwdLanes = fwdLanesIn;
         revLanes = revLanesIn;
-        leftHandDrive = leftHandDriveIn;
         lanes = new LaneSegment[fwdLanes + revLanes];
         roadNodes = new RoadNode[] {new RoadNode(this, 0), new RoadNode(this, 1)};
 
         Debug.Log("Centre line: " + roadCentreLine.GetPrintable());
         for (int lane = 0; lane < lanes.Length; lane++) {
-            bool isLaneReverse = ((leftHandDrive && lane >= fwdLanes) || (! leftHandDrive && lane < revLanes));
+            bool isLaneReverse = ((Settings.LeftHandDrive && lane >= fwdLanes) || (! Settings.LeftHandDrive && lane < revLanes));
             lanes[lane] = new LaneSegment(calculateLaneMiddleLine(lane), isLaneReverse);
             Debug.Log("Lane " + lane + ": " + lanes[lane].centreLine.GetPrintable());
         }
@@ -51,7 +49,7 @@ public class RoadSegment
 
     // Returns the line dividing the two lanes with oposing traffic directions
     public Line GetDirectionDividorLine() {
-        if (leftHandDrive) {
+        if (Settings.LeftHandDrive) {
             // Right edge of last forward lane
             return lanes[fwdLanes - 1].GetRightEdge();
         } else {
@@ -65,7 +63,7 @@ public class RoadSegment
         List<Line> laneEdges = new List<Line>();
         for (int laneIndex = 1; laneIndex < lanes.Length; laneIndex++) {
             // If lane is not first lane to right of dividor, no need for lane marking
-            if (leftHandDrive && laneIndex != fwdLanes || ! leftHandDrive && laneIndex != revLanes) {
+            if (Settings.LeftHandDrive && laneIndex != fwdLanes || ! Settings.LeftHandDrive && laneIndex != revLanes) {
                 laneEdges.Add(lanes[laneIndex].GetLeftEdge());
             }
         }
