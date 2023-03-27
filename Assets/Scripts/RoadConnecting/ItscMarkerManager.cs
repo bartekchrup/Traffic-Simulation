@@ -5,21 +5,32 @@ using UnityEngine.EventSystems;
 
 public class ItscMarkerManager : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    private Intersection intersection;
+    [SerializeField] private UIFlowManager flowManager;
+    public Intersection Intersection { get; private set; }
+    private bool isMarkerClicked;
 
     void Start() {
         transform.localScale = Settings.INTERSECTION_MARKER_SIZE;
+        isMarkerClicked = false;
+    }
+
+    public bool HasBeenClicked() {
+        return isMarkerClicked;
+    }
+
+    public void ResetMarker() {
+        isMarkerClicked = false;
     }
 
     public void SetIntersection(Intersection intersectionIn) {
-        intersection = intersectionIn;
-        transform.position = intersection.GetMiddlePosition();
+        Intersection = intersectionIn;
+        transform.position = Intersection.GetMiddlePosition();
     }
 
     public void OnPointerClick(PointerEventData eventData) {
         if (eventData.button == PointerEventData.InputButton.Left) {
-            // EDIT INTERSECTION LANE CONNECTIONS
-
+            // Toggle marker state to clicked
+            isMarkerClicked = true;
         }
     }
 

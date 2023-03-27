@@ -24,6 +24,14 @@ public class LaneNode
         laneConnections.Remove(node);
     }
 
+    public HashSet<LaneNode> GetConnections() {
+        return laneConnections;
+    }
+
+    public Vector2 GetPosition() {
+        return lane.centreLine.GetPoint(laneEndIndex);
+    }
+
     public Vector2 GetControlPoint(float distanceFromNode) {
         Vector2[] points = lane.centreLine.GetPoints();
         Vector2 origin = points[laneEndIndex];

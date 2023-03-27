@@ -6,6 +6,7 @@ public class SelectIntersectionTool : MonoBehaviour
 {
     [SerializeField] private RoadNetworkManager roadNetworkManager;
     [SerializeField] private ItscMarkerManager IntersectionMarkerPrefab;
+    [SerializeField] private UIFlowManager flowManager;
 
     private List<ItscMarkerManager> markers;
     // Start is called before the first frame update
@@ -17,7 +18,14 @@ public class SelectIntersectionTool : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        foreach (ItscMarkerManager marker in markers) {
+            if (marker.HasBeenClicked()) {
+                if (marker.Intersection != null) {
+                    flowManager.SwitchLaneConnecting(marker.Intersection);
+                    marker.ResetMarker();
+                }
+            }
+        }
     }
 
     void OnEnable() {

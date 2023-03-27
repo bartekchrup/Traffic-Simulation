@@ -86,6 +86,16 @@ public class ConnectLanes : MonoBehaviour
         }
         setUpExitMarkers();
         showEntryMarkers();
+        showExistingConnections();
+    }
+
+    // Adds bezier curves to connectedBeziersList for connections already made
+    private void showExistingConnections() {
+        foreach (LaneMarkerManager marker in enterLaneMarkers) {
+            foreach (LaneNode connectedNode in marker.LaneNode.GetConnections()) {
+                drawBezierBetweenNodes(marker.LaneNode, connectedNode, marker.GetColor());
+            }
+        }
     }
 
     // Instantiates a marker based on a RoadNode, which lane on that road
@@ -135,30 +145,29 @@ public class ConnectLanes : MonoBehaviour
         }
         // Only draw a line if line wasnt already present
         if (!removedLine) {
-            drawBezierBetweenMarkers(selectedStartMarker, clickedMarker);
+            drawBezierBetweenNodes(selectedStartMarker.LaneNode, clickedMarker.LaneNode, selectedStartMarker.GetColor());
             selectedStartMarker.LaneNode.ConnectLanes(clickedMarker.LaneNode);
         }
     }
 
-    // Draws a cubic bazier line using two given lane end markers
-    private void drawBezierBetweenMarkers(LaneMarkerManager startMarker, LaneMarkerManager endMarker) {
-        if (startMarker == null || endMarker == null) {
-            Debug.LogError("One of the markers is null");
+    // Draws a cubic bazier line using two given lane nodes of the specified color
+    private void drawBezierBetweenNodes(LaneNode startNode, LaneNode endNode, Color color) {
+        if (startNode == null || endNode == null) {
+            Debug.LogError("One of the nodes is null");
             return;
         }
-        Vector2 startPoint = startMarker.GetPosition();
-        Vector2 endPoint = endMarker.GetPosition();
+        Vector2 startPoint = startNode.GetPosition();
+        Vector2 endPoint = endNode.GetPosition();
         // The distance of the 2nd and 3rd control points on the bezier line varies with distance between the start and end
         float tangentDistance = Vector2.Distance(startPoint, endPoint) * Settings.TANGENT_DISTANCE_MULTIPLIER;
-        Vector2 startTangent = startMarker.LaneNode.GetControlPoint(tangentDistance);
-        Vector2 endTangent = endMarker.LaneNode.GetControlPoint(tangentDistance);
+        Vector2 startTangent = startNode.GetControlPoint(tangentDistance);
+        Vector2 endTangent = endNode.GetControlPoint(tangentDistance);
 
         BezierCurveDrawer lineManager = Instantiate(bezierLinePrefab);
         lineManager.SetPoints(startPoint, startTangent, endTangent, endPoint);
-        lineManager.SetColor(startMarker.GetColor());
+        lineManager.SetColor(color);
         connectedBeziersList.Add(lineManager);
     }
-
 
     // Generate exit markers but keep them disabled
     private void setUpExitMarkers() {
@@ -192,8 +201,8 @@ public class ConnectLanes : MonoBehaviour
         selectingBezier.gameObject.SetActive(false);
 
         // Activate all entry markers and disable exit markers
-        exitLaneMarkers.ForEach(marker => marker.gameObject.SetActive(false));
-        enterLaneMarkers.ForEach(marker => marker.gameObject.SetActive(true));
+            exitLaneMarkers.ForEach(marker => marker.gameObject.SetActive(false));
+            enterLaneMarkers.ForEach(marker => marker.gameObject.SetActive(true));
     }
 
 }
