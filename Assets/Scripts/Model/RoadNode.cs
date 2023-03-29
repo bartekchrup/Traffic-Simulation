@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RoadNode
@@ -22,23 +23,63 @@ public class RoadNode
         return road.GetEndEdgeCoordinates(roadEndIndex);
     }
 
-    public List<LaneSegment> GetOutgoingLanes() {
+    // public List<LaneSegment> GetOutgoingLanes() {
+    //     // If beginning of road
+    //     if (roadEndIndex == 0) {
+    //         return road.GetDirectionLanes(true);
+    //     } else {
+    //         return road.GetDirectionLanes(false);
+    //     }
+    // }
+
+    // public IEnumerable<LaneNode> GetOutgoingLaneNodes() {
+    //     // If beginning of road
+    //     LaneSegment[] outgoingLanes;
+    //     if (roadEndIndex == 0) {
+    //         outgoingLanes = road.GetDirectionLanes(true);
+    //     } else {
+    //         outgoingLanes = road.GetDirectionLanes(false);
+    //     }
+    //     return outgoingLanes.Select(lane => lane.GetLaneNode(roadEndIndex));
+    // }
+
+    // public IEnumerable<LaneNode> GetIncomingLaneNodes() {
+    //     // If beginning of road
+    //     LaneSegment[] outgoingLanes;
+    //     if (roadEndIndex == 0) {
+    //         outgoingLanes = road.GetDirectionLanes(false);
+    //     } else {
+    //         outgoingLanes = road.GetDirectionLanes(true);
+    //     }
+    //     return outgoingLanes.Select(lane => lane.GetLaneNode(roadEndIndex));
+    // }
+
+    public IEnumerable<LaneNode> GetIncomingLaneNodes() {
         // If beginning of road
         if (roadEndIndex == 0) {
-            return road.GetDirectionLanes(true);
+            return road.GetDirectionLaneNodes(roadEndIndex, false);
         } else {
-            return road.GetDirectionLanes(false);
+            return road.GetDirectionLaneNodes(roadEndIndex, true);
         }
     }
 
-    public List<LaneSegment> GetIncomingLanes() {
+        public IEnumerable<LaneNode> GetOutgoingLaneNodes() {
         // If beginning of road
         if (roadEndIndex == 0) {
-            return road.GetDirectionLanes(false);
+            return road.GetDirectionLaneNodes(roadEndIndex, true);
         } else {
-            return road.GetDirectionLanes(true);
+            return road.GetDirectionLaneNodes(roadEndIndex, false);
         }
     }
+
+    // public List<LaneSegment> GetIncomingLanes() {
+    //     // If beginning of road
+    //     if (roadEndIndex == 0) {
+    //         return road.GetDirectionLanes(false);
+    //     } else {
+    //         return road.GetDirectionLanes(true);
+    //     }
+    // }
 
 
 }

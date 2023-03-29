@@ -31,7 +31,6 @@ public class ConnectRoadSegments : MonoBehaviour
     private Intersection intersection;
 
     void OnEnable() {
-        Debug.Log("Enabling");
         // Removes draw button, updates status text and bg color
         updateUIConnecting();
 
@@ -142,7 +141,6 @@ public class ConnectRoadSegments : MonoBehaviour
     }
 
     private void restoreUI() {
-        Debug.Log("Disabling");
         statusBarManager.SetTextIdle();
         backgroundManager.ResetBackground();
         connectButtonText.text = IDLE_TEXT;

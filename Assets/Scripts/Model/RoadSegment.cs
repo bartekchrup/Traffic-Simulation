@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -71,15 +73,13 @@ public class RoadSegment
     }
 
     // Returns lanes with requested isReverse value
-    public List<LaneSegment> GetDirectionLanes(bool isLaneReverse) {
-        List<LaneSegment> lanesInDirection = new List<LaneSegment>();
-        foreach (LaneSegment lane in lanes) {
-            if (lane.isReverse == isLaneReverse) {
-                lanesInDirection.Add(lane);
-            }
-        }
-        return lanesInDirection;
+    public LaneSegment[] GetDirectionLanes(bool isLaneReverse) {
+        return Array.FindAll(lanes, lane => lane.isReverse);
 
+    }
+
+    public IEnumerable<LaneNode> GetDirectionLaneNodes(int laneEndIndex, bool isReverse) {
+        return Array.FindAll(lanes, lane => lane.isReverse == isReverse).Select(lane => lane.GetLaneNode(laneEndIndex));
     }
 
     // Returns 2 coordinates for the edge of the road at the end specified

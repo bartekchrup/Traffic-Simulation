@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Enables a mode in the application while disabling every other mode to make sure no incorrect ui is shown
 public class UIFlowManager : MonoBehaviour
 {
     [SerializeField] private NewRoadSelectionTool newRoadBuilder;
     [SerializeField] private ConnectRoadSegments connectRoadsTool;
     [SerializeField] private ConnectLanes connectLanesTool;
     [SerializeField] private SelectIntersectionTool selectIntersectionsTool;
+    [SerializeField] private TrafficLightManager trafficLightManager;
 
     public void SwitchRoadBuilding() {
         disableAll();
@@ -30,10 +32,17 @@ public class UIFlowManager : MonoBehaviour
         selectIntersectionsTool.enabled = true;
     }
 
+    public void SwitchTrafficLights(Intersection intersection) {
+        disableAll();
+        trafficLightManager.enabled = true;
+        trafficLightManager.EnableEditTrafficLights(intersection);
+    }
+
     private void disableAll() {
         newRoadBuilder.enabled = false;
         connectRoadsTool.enabled = false;
         connectLanesTool.enabled = false;
         selectIntersectionsTool.enabled = false;
+        trafficLightManager.enabled = false;
     }
 }

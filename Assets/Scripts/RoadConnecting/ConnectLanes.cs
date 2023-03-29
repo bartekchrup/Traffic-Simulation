@@ -5,13 +5,18 @@ using UnityEngine.Events;
 
 public class ConnectLanes : MonoBehaviour
 {
+    // Prefabs for objects instantiated
     [SerializeField] private LaneMarkerManager laneMarkerPrefab;
     [SerializeField] private BezierCurveDrawer bezierLinePrefab;
     // To update state
     [SerializeField] private StatusBarManager statusBarManager;
+    // To transition between application modes
     [SerializeField] private UIFlowManager flowManager;
+    // Enable/disable panel when in intersection edit mode
+    [SerializeField] private GameObject trafficLightPanel;
 
-    private List<RoadNode> intersectionNodes;
+    public Intersection Intersection { get; private set; }
+
     private List<LaneMarkerManager> enterLaneMarkers;
     private List<LaneMarkerManager> exitLaneMarkers;
     private bool showingExitMarkers;
@@ -68,25 +73,27 @@ public class ConnectLanes : MonoBehaviour
         }
     }
 
-    public void StartConnecting(Intersection intersection) {
-        enabled = true;
+    public void StartConnecting(Intersection intersectionIn) {
+        Intersection = intersectionIn;
         // At first only entry markers are show
         showingExitMarkers = false;
         enterLaneMarkers = new List<LaneMarkerManager>();
         exitLaneMarkers = new List<LaneMarkerManager>();
         connectedBeziersList = new List<BezierCurveDrawer>();
-        intersectionNodes = intersection.GetNodes();
+        List<RoadNode> intersectionNodes = Intersection.GetNodes();
         // For each road in intersection, for each lane entering: create a lane marker
         for (int nodeIndex = 0; nodeIndex < intersectionNodes.Count; nodeIndex++) {
-            List<LaneSegment> currentRoadLanes = intersectionNodes[nodeIndex].GetOutgoingLanes();
-            foreach (LaneSegment lane in currentRoadLanes) {
-                LaneMarkerManager newMarker = instantiateMarker(nodeIndex, lane);
+            IEnumerable<LaneNode> currentLaneNodes = intersectionNodes[nodeIndex].GetOutgoingLaneNodes();
+            foreach (LaneNode laneNode in currentLaneNodes) {
+                LaneMarkerManager newMarker = instantiateMarker(laneNode, nodeIndex);
                 enterLaneMarkers.Add(newMarker);
             }
         }
         setUpExitMarkers();
         showEntryMarkers();
         showExistingConnections();
+        // Show buttons to navigate to traffic light edit mode
+        trafficLightPanel.SetActive(true);
     }
 
     // Adds bezier curves to connectedBeziersList for connections already made
@@ -99,11 +106,9 @@ public class ConnectLanes : MonoBehaviour
     }
 
     // Instantiates a marker based on a RoadNode, which lane on that road
-    private LaneMarkerManager instantiateMarker(int nodeIndex, LaneSegment lane) {
+    private LaneMarkerManager instantiateMarker(LaneNode laneNode, int nodeIndex) {
         LaneMarkerManager newLaneMarkerManager = Instantiate(laneMarkerPrefab);
-        // Assigns the marker to a lane and which end of that lane 0 or 1
-        int roadEndIndex = intersectionNodes[nodeIndex].roadEndIndex;
-        newLaneMarkerManager.SetLaneNode(lane.GetLaneNode(roadEndIndex));
+        newLaneMarkerManager.SetLaneNode(laneNode);
         // Reuses colors if intersection has more than 5 incoming roads
         Color[] colors = Settings.LANE_COLORS;
         newLaneMarkerManager.SetColor(colors[nodeIndex % colors.Length]);
@@ -111,6 +116,7 @@ public class ConnectLanes : MonoBehaviour
     }
 
     void OnDisable() {
+        trafficLightPanel.SetActive(false);
         statusBarManager.SetTextIdle();
         // Delete markers
         enterLaneMarkers.ForEach(marker => Destroy(marker.gameObject));
@@ -171,11 +177,12 @@ public class ConnectLanes : MonoBehaviour
 
     // Generate exit markers but keep them disabled
     private void setUpExitMarkers() {
+        List<RoadNode> intersectionNodes = Intersection.GetNodes();
         // For each road in intersection, for each lane exiting: create a lane marker
         for (int nodeIndex = 0; nodeIndex < intersectionNodes.Count; nodeIndex++) {
-            List<LaneSegment> currentRoadLanes = intersectionNodes[nodeIndex].GetIncomingLanes();
-            foreach (LaneSegment lane in currentRoadLanes) {
-                LaneMarkerManager newMarker = instantiateMarker(nodeIndex, lane);
+            IEnumerable<LaneNode> currentLaneNodes = intersectionNodes[nodeIndex].GetIncomingLaneNodes();
+            foreach (LaneNode laneNode in currentLaneNodes) {
+                LaneMarkerManager newMarker = instantiateMarker(laneNode, nodeIndex);
                 newMarker.gameObject.SetActive(false);
                 exitLaneMarkers.Add(newMarker);
             }
