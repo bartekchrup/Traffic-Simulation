@@ -764,7 +764,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 15
   zoomSpeed: 0.5
-  minZoomLevel: 2
+  minZoomLevel: 5
   maxZoomLevel: 20
 --- !u!114 &519420034
 MonoBehaviour:
@@ -857,6 +857,7 @@ GameObject:
   - component: {fileID: 521870126}
   - component: {fileID: 521870125}
   - component: {fileID: 521870124}
+  - component: {fileID: 521870127}
   m_Layer: 5
   m_Name: Edit Lights Button
   m_TagString: Untagged
@@ -928,7 +929,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 521870125}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 521870127}
+        m_TargetAssemblyTypeName: EditLightsButtonManager, Assembly-CSharp
+        m_MethodName: EditLightsButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &521870125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -967,6 +980,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 521870122}
   m_CullTransparentMesh: 1
+--- !u!114 &521870127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 521870122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76fc3b111066391489dc4e6a023cc373, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intersectionEditScript: {fileID: 886940392}
+  flowManager: {fileID: 1741476148}
 --- !u!1 &547684129
 GameObject:
   m_ObjectHideFlags: 0
@@ -1717,6 +1744,7 @@ GameObject:
   - component: {fileID: 886940390}
   - component: {fileID: 886940392}
   - component: {fileID: 886940393}
+  - component: {fileID: 886940394}
   m_Layer: 0
   m_Name: ConnectorTool
   m_TagString: Untagged
@@ -1775,6 +1803,7 @@ MonoBehaviour:
   bezierLinePrefab: {fileID: -2918070187513465458, guid: 24e5591f12f8c7c46a976e8fdf442f5a, type: 3}
   statusBarManager: {fileID: 1485623077}
   flowManager: {fileID: 1741476148}
+  trafficLightPanel: {fileID: 2119333469}
 --- !u!114 &886940393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1790,6 +1819,20 @@ MonoBehaviour:
   roadNetworkManager: {fileID: 477593998}
   IntersectionMarkerPrefab: {fileID: 9214441407558740791, guid: 9e6976436eca8f14b8aa76102c5a7812, type: 3}
   flowManager: {fileID: 1741476148}
+--- !u!114 &886940394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886940389}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1c0c5e8cd2595043924a0637f5683bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftUIPanel: {fileID: 1052257387}
+  lightPanelPrefab: {fileID: -7895213243628037860, guid: 13ba3b69939ba394481a22c8e0b4d550, type: 3}
 --- !u!1 &991846339
 GameObject:
   m_ObjectHideFlags: 0
@@ -3549,6 +3592,7 @@ MonoBehaviour:
   connectRoadsTool: {fileID: 886940390}
   connectLanesTool: {fileID: 886940392}
   selectIntersectionsTool: {fileID: 886940393}
+  trafficLightManager: {fileID: 886940394}
 --- !u!114 &1741476149
 MonoBehaviour:
   m_ObjectHideFlags: 0

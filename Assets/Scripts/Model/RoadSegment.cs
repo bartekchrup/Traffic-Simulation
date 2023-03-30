@@ -22,11 +22,9 @@ public class RoadSegment
         lanes = new LaneSegment[fwdLanes + revLanes];
         roadNodes = new RoadNode[] {new RoadNode(this, 0), new RoadNode(this, 1)};
 
-        Debug.Log("Centre line: " + roadCentreLine.GetPrintable());
         for (int lane = 0; lane < lanes.Length; lane++) {
             bool isLaneReverse = ((Settings.LeftHandDrive && lane >= fwdLanes) || (! Settings.LeftHandDrive && lane < revLanes));
             lanes[lane] = new LaneSegment(calculateLaneMiddleLine(lane), isLaneReverse);
-            Debug.Log("Lane " + lane + ": " + lanes[lane].centreLine.GetPrintable());
         }
     }
 
@@ -55,8 +53,8 @@ public class RoadSegment
             // Right edge of last forward lane
             return lanes[fwdLanes - 1].GetRightEdge();
         } else {
-            // Right edge of last rev lane
-            return lanes[revLanes - 1].GetRightEdge();
+            // Left edge of first forward lane
+            return lanes[lanes.Length - revLanes].GetLeftEdge();
         }
     }
 

@@ -28,7 +28,10 @@ public class NewRoadDrawManager : MonoBehaviour
         RoadSegment newRoad = new RoadSegment(roadCentreLine, fwdLanesNumber, revLanesNumber);
         roadNetworkManager.AddRoad(newRoad);
         drawRoadEdges(newRoad);
-        drawRoadDividor(newRoad);
+        // Only draw divisor between directions if the road has 2 directions
+        if (revLanesNumber > 0) {
+            drawRoadDividor(newRoad);
+        }
         drawLaneMarkings(newRoad);
     }
 

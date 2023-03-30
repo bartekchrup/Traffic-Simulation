@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 6.6391, y: 1.9235}
+  m_SizeDelta: {x: 4.847, y: 2.673}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &138911883275034793
 MeshRenderer:
@@ -76,8 +76,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1825008987
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7235118732787860955
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -183,6 +183,7 @@ GameObject:
   - component: {fileID: 1505024108021868241}
   - component: {fileID: 3498957013678922706}
   - component: {fileID: 1353758178849963625}
+  - component: {fileID: 2744022833804014917}
   m_Layer: 0
   m_Name: Single Light State
   m_TagString: Untagged
@@ -199,8 +200,8 @@ RectTransform:
   m_GameObject: {fileID: 4080165740419820427}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 9215857000129711253}
   - {fileID: 2695522418036646888}
@@ -209,8 +210,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.4853, y: 1.1806}
-  m_SizeDelta: {x: 4.2515, y: 11.2413}
+  m_AnchoredPosition: {x: 0.081, y: -0.1447}
+  m_SizeDelta: {x: 4.5757, y: 11.82}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3498957013678922706
 MonoBehaviour:
@@ -229,8 +230,8 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 1
-  m_Spacing: 1
+  m_ChildAlignment: 4
+  m_Spacing: 0
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -258,6 +259,24 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &2744022833804014917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4080165740419820427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c155cc9800abed479996f8dd818bd58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laneTextField: {fileID: 7235118732787860955}
+  lightSprite: {fileID: 2841761230854980453}
+  redSprite: {fileID: 21300000, guid: 1670d6c556922d04b8736336b69df693, type: 3}
+  redToGreenSprite: {fileID: 21300000, guid: 5897d1ecb5dea4b42b33cf90494190a9, type: 3}
+  greenSprite: {fileID: 21300000, guid: 6c7ffe007f3148543b3c842267ab2874, type: 3}
+  greenToRedSprite: {fileID: 21300000, guid: 2fcea3c66c1b6d446b167db74a9fb95b, type: 3}
 --- !u!1 &6376412578598830738
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,8 +352,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1825008987
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1670d6c556922d04b8736336b69df693, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -9,7 +9,7 @@ public class UIFlowManager : MonoBehaviour
     [SerializeField] private ConnectRoadSegments connectRoadsTool;
     [SerializeField] private ConnectLanes connectLanesTool;
     [SerializeField] private SelectIntersectionTool selectIntersectionsTool;
-    [SerializeField] private TrafficLightManager trafficLightManager;
+    [SerializeField] private EditTrafficSchemeView trafficLightManager;
 
     public void SwitchRoadBuilding() {
         disableAll();

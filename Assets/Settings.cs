@@ -5,12 +5,12 @@ using UnityEngine;
 public class Settings : MonoBehaviour
 {
     // Interval of snap on grid when drawing new road segments
-    public const float GridSnapSize = 0.5f;
+    public const float GRID_SNAP_SIZE = 0.5f;
     // Amount of squares across
-    public const int CanvasWidth = 70;
+    public const int CANVAS_WIDTH = 70;
     // Amount of squares vertically
-    public const int CanvasHeight = 50;
-    public static readonly bool LeftHandDrive = false;
+    public const int CANVAS_HEIGHT = 50;
+    public static readonly bool LeftHandDrive = true;
     // How much markers increase in size when hovering over
     public const float HOVER_SCALE_FACTOR = 1.4f;
     public static readonly Vector3 INTERSECTION_MARKER_SIZE = new Vector3(0.5f, 0.5f, 0.5f);
@@ -22,4 +22,6 @@ public class Settings : MonoBehaviour
     // the distance between the start and end of the line multiplied by this
     // Higher numbers usuall result in smoother, longer lines
     public const float TANGENT_DISTANCE_MULTIPLIER = 0.4f;
+
+    public const float LIGHT_PANEL_DIST_RATIO = 0.3f;
 }

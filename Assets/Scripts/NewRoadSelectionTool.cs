@@ -87,7 +87,7 @@ public class NewRoadSelectionTool : MonoBehaviour
     // Helper functions
     private Vector2 roundToGrid(Vector2 coordinates) {
         Vector2 rounded;
-        float gridSize = Settings.GridSnapSize;
+        float gridSize = Settings.GRID_SNAP_SIZE;
         rounded.x = (Mathf.Round(coordinates.x / gridSize)) * gridSize;
         rounded.y = (Mathf.Round(coordinates.y / gridSize)) * gridSize;
         return rounded;

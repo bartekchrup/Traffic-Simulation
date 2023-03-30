@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public class LaneNode
     public LaneSegment lane { get; private set; }
     // which end of the road
     public int laneEndIndex { get; private set; }
+
+    public int trafficLightState { get; private set; } = TrafficLight.Red;
 
     // Set of other nodes this lane is connected to, no repeats
     private HashSet<LaneNode> laneConnections = new HashSet<LaneNode>();
@@ -44,4 +47,12 @@ public class LaneNode
         return r.GetPoint(distanceFromNode);
     }
 
+    public bool HasConnections()
+    {
+        return (laneConnections.Count > 0);
+    }
+
+    public void SetTrafficLightState(int state) {
+        trafficLightState = state;
+    }
 }

@@ -99,8 +99,8 @@ public class ConnectRoadSegments : MonoBehaviour
             List<Vector2> listWithoutCurrentRoad = getListWithoutRoad(pointsToDraw, road);
             foreach (Vector2 side in road) {
 
-                // Only draw if the current point doesnt yet have a line
-                if (pointsToDraw.Contains(side)) {
+                // Only draw if the current point doesnt yet have a line, and there are points to connect
+                if (pointsToDraw.Contains(side) && listWithoutCurrentRoad.Count > 0) {
                     Vector2 closestPoint = findClosestPoint(listWithoutCurrentRoad, side, pointsToDraw);
                     LineDrawer connectionLine = Instantiate(solidLinePrefab);
                     connectionLine.SetPoints(side, closestPoint);

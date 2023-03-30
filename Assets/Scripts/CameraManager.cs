@@ -11,7 +11,6 @@ public class CameraManager : MonoBehaviour
     public float minZoomLevel = 1;
     public float maxZoomLevel = 10;
 
-
     private void Awake() {
         inputSystem = new UserInputSystem();
     }
