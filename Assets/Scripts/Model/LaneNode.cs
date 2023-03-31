@@ -9,7 +9,8 @@ public class LaneNode
     // which end of the road
     public int laneEndIndex { get; private set; }
 
-    public int trafficLightState { get; private set; } = TrafficLight.Red;
+    private TrafficLight trafficLight;
+    public bool trafficLightState { get; private set; } = false;
 
     // Set of other nodes this lane is connected to, no repeats
     private HashSet<LaneNode> laneConnections = new HashSet<LaneNode>();
@@ -35,6 +36,10 @@ public class LaneNode
         return lane.centreLine.GetPoint(laneEndIndex);
     }
 
+    public void SetTrafficLight(TrafficLight trafficLightIn) {
+        trafficLight = trafficLightIn;
+    }
+
     public Vector2 GetControlPoint(float distanceFromNode) {
         Vector2[] points = lane.centreLine.GetPoints();
         Vector2 origin = points[laneEndIndex];
@@ -52,7 +57,12 @@ public class LaneNode
         return (laneConnections.Count > 0);
     }
 
-    public void SetTrafficLightState(int state) {
-        trafficLightState = state;
+    public void SetTrafficLightState(TrafficLight.LightState state) {
+        if (state == TrafficLight.LightState.Green) {
+            trafficLightState = true;
+        } else {
+            trafficLightState = false;
+        }
+        trafficLight.SetState(state);
     }
 }

@@ -8,11 +8,15 @@ public class EditTrafficSchemeView : MonoBehaviour
 {
     // This UI element is hidden while editing the lights scheme
     [SerializeField] GameObject leftUIPanel;
+    // Activates the panel for editing the traffic scheme
+    [SerializeField] TrafficSchemePanel schemePanel;
     // Prefab for UI panel displaying an array of traffic lights
     [SerializeField] LightDisplayPanel lightPanelPrefab;
 
+
     // To store the traffic light display panels
     private List<LightDisplayPanel> lightPanelsList;
+
 
     // Start is called before the first frame update
     void Start()
@@ -33,12 +37,20 @@ public class EditTrafficSchemeView : MonoBehaviour
         leftUIPanel.SetActive(false);
         foreach (RoadNode roadNode in intersection.GetNodes()) {
             addLightDisaplyPanel(roadNode);
-
         }
+        List<TrafficLight> trafficLightList = new List<TrafficLight>();
+        foreach (LightDisplayPanel panel in lightPanelsList) {
+            foreach (TrafficLight trafficLight in panel.GetTrafficLights()) {
+                trafficLightList.Add(trafficLight);
+            }
+        }
+        schemePanel.gameObject.SetActive(true);
+        schemePanel.InitialisePanel(trafficLightList, intersection);
     }
 
     void OnDisable() {
         leftUIPanel.SetActive(true);
+        schemePanel.gameObject.SetActive(false);
     }
 
     private void addLightDisaplyPanel(RoadNode node) {
@@ -55,6 +67,7 @@ public class EditTrafficSchemeView : MonoBehaviour
     // Returns a vector LIGHT_PANEL_DIST_RATIO of the road length away from the intersection 
     private Vector2 calculatePanelSpawnPos(RoadNode roadNode) {
         float ratio = Settings.LIGHT_PANEL_DIST_RATIO;
+        // This is a weighted average
         return ((1-ratio) * roadNode.GetPosition()) + (ratio * roadNode.GetOtherNode().GetPosition());
     }
 }

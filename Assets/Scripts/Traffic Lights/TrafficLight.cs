@@ -5,24 +5,40 @@ using UnityEngine;
 
 public class TrafficLight : MonoBehaviour
 {
-    public const int Red = 0;
-    public const int RedToGreen = 1;
-    public const int Green = 2;
-    public const int GreenToRed = 3;
+    // Used to assign each light a unique number of identify them
+    private static int usedLightIndexTracker = 0;
+    private static int GetNextLightIndex() {
+        int indexToReturn = usedLightIndexTracker;
+        usedLightIndexTracker = (usedLightIndexTracker + 1) % 26;
+        return indexToReturn++;
+    }
+    // Converts an int index to a displayable char
+    public static char IndexToChar(int indexIn) {
+        return (char)(indexIn+65);
+    }
 
-    // Lane node associated with traffic light
-    public LaneNode node { get; private set; }
-    
-    // Displays the lane number
-    [SerializeField] private TMP_Text laneTextField;
-    // To change the sprite when that state changes
-    [SerializeField] private SpriteRenderer lightSprite;
+    public enum LightState {
+        Red = 0,
+        RedToGreen = 1,
+        Green = 2,
+        GreenToRed = 3,
+    }
 
     // State sprites
     [SerializeField] private Sprite redSprite;
     [SerializeField] private Sprite redToGreenSprite;
     [SerializeField] private Sprite greenSprite;
     [SerializeField] private Sprite greenToRedSprite;
+
+    // INSTANCE VARIABLES
+    // Displays the lane number
+    [SerializeField] private TMP_Text laneTextField;
+    // To change the sprite when that state changes
+    [SerializeField] private SpriteRenderer lightSprite;
+    // Lane node associated with traffic light
+    public LaneNode node { get; private set; }
+    // Index used to display letter above light and identify it in scheme edit panel
+    public int Index { get; private set; }
 
     // Start is called before the first frame update
     void Start()
@@ -36,25 +52,32 @@ public class TrafficLight : MonoBehaviour
         
     }
 
-    public void SetNode(LaneNode nodeIn) {
+    public void Instantiate(LaneNode nodeIn) {
         node = nodeIn;
+        node.SetTrafficLight(this);
+        setIndex();
     }
 
-    public void SetLane(int laneNumber) {
-        laneTextField.SetText("Lane " + (laneNumber + 1));
-        // +1 because index starts at zero
-    }
 
-    public void SetState(int state) {
-        if (state == TrafficLight.Red) {
+    public void SetState(LightState state) {
+        Debug.Log("changing state in light to " + state);
+        if (state == LightState.Red) {
             lightSprite.sprite = redSprite;
-        } else if (state == TrafficLight.RedToGreen) {
+        } else if (state == LightState.RedToGreen) {
             lightSprite.sprite = redToGreenSprite;
-        } else if (state == TrafficLight.Green) {
+        } else if (state == LightState.Green) {
             lightSprite.sprite = greenSprite;
-        } else {
+        } else if (state == LightState.GreenToRed) {
             lightSprite.sprite = greenToRedSprite;
+        } else {
+            Debug.LogError("Invalid light state");
         }
+    }
+
+    // Gets a new index and sets the display to the associated char, lights are A, B, C...
+    private void setIndex() {
+        Index = GetNextLightIndex();
+        laneTextField.SetText("" + IndexToChar(Index));
     }
 
 }

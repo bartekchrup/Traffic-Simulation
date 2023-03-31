@@ -46,18 +46,18 @@ public class LightDisplayPanel : MonoBehaviour
     //     foreach (TrafficLight light in trafficLights) {
     //         int newState = (light.node.trafficLightState + 1) % 4;
     //         light.node.SetTrafficLightState(newState);
-    //         light.SetState(newState);
+    //         light.SetState((TrafficLight.LightState)newState);
     //     }
     // }
 
     public void SetLaneNodes(LaneNode[] nodesIn) {
         nodes = nodesIn;
         trafficLights = new List<TrafficLight>();
-        // For each lane node
-        for (int laneNum = 0; laneNum < nodes.Length; laneNum++) {
+
+        foreach (LaneNode laneNode in nodes) {
             // Only add lights for nodes which have a connection
-            if (nodes[laneNum].HasConnections()) {
-                addTrafficLight(nodes[laneNum], laneNum);
+            if (laneNode.HasConnections()) {
+                addTrafficLight(laneNode);
             }
         }
     }
@@ -66,10 +66,13 @@ public class LightDisplayPanel : MonoBehaviour
         transform.position = positionIn;
     }
 
-    private void addTrafficLight(LaneNode node, int laneNum) {
+    public List<TrafficLight> GetTrafficLights() {
+        return trafficLights;
+    }
+
+    private void addTrafficLight(LaneNode node) {
         TrafficLight newLight = Instantiate(trafficLightPrefab);
-        newLight.SetNode(node);
-        newLight.SetLane(laneNum);
+        newLight.Instantiate(node);
         newLight.transform.SetParent(this.transform);
         trafficLights.Add(newLight);
     }
