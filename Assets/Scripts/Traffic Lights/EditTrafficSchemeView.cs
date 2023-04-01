@@ -13,9 +13,11 @@ public class EditTrafficSchemeView : MonoBehaviour
     // Prefab for UI panel displaying an array of traffic lights
     [SerializeField] LightDisplayPanel lightPanelPrefab;
 
-
     // To store the traffic light display panels
     private List<LightDisplayPanel> lightPanelsList;
+
+    // Stores the intersection that is beign edited right now
+    private Intersection currentIntersection;
 
 
     // Start is called before the first frame update
@@ -30,12 +32,17 @@ public class EditTrafficSchemeView : MonoBehaviour
         
     }
 
+    public void SetUpTrafficLights() {
+
+    }
+
     // Called after enabling script, shows all light scheme UI
     public void EnableEditTrafficLights(Intersection intersection) {
+        currentIntersection = intersection;
         lightPanelsList = new List<LightDisplayPanel>();
-
         leftUIPanel.SetActive(false);
-        foreach (RoadNode roadNode in intersection.GetNodes()) {
+
+        foreach (RoadNode roadNode in currentIntersection.GetNodes()) {
             addLightDisaplyPanel(roadNode);
         }
         List<TrafficLight> trafficLightList = new List<TrafficLight>();
@@ -45,7 +52,7 @@ public class EditTrafficSchemeView : MonoBehaviour
             }
         }
         schemePanel.gameObject.SetActive(true);
-        schemePanel.InitialisePanel(trafficLightList, intersection);
+        schemePanel.InitialisePanel(trafficLightList, currentIntersection);
     }
 
     void OnDisable() {

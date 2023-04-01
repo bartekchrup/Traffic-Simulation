@@ -52,11 +52,6 @@ public class TrafficSchemePanel : MonoBehaviour
             lightConfig.Add(phase.GetToggleStates());
         }
         intersection.SetLightConfig(lightConfig);
-        // foreach (bool[] array in lightConfig) {
-        //     foreach (bool state in array) {
-        //         Debug.Log(state);
-        //     }
-        // }
         intersection.SetTrafficLights(trafficLights);
         intersection.SetPhaseDurations(GetPhaseDurations());
     }

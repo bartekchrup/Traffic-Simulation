@@ -9,15 +9,11 @@ public class RoadNetworkManager : MonoBehaviour
 
     public List<RoadSegment> roads { get; private set; } = new List<RoadSegment>();
 
-    void Start()
-    {
-        
-    }
     void Update()
     {
         foreach (Intersection intersection in intersections) {
             intersection.IncreaseTimeSinceLastPhase(Time.deltaTime);
-            if (intersection.LightConfig != null) {
+            if (intersection.AreTrafficLightsEnabled) {
                 intersection.UpdateLights();
             }
         }

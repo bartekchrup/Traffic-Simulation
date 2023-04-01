@@ -24,7 +24,7 @@ public class ItscMarkerManager : MonoBehaviour, IPointerClickHandler, IPointerEn
 
     public void SetIntersection(Intersection intersectionIn) {
         Intersection = intersectionIn;
-        transform.position = Intersection.GetMiddlePosition();
+        transform.position = Intersection.GetCentrePosition();
     }
 
     public void OnPointerClick(PointerEventData eventData) {
