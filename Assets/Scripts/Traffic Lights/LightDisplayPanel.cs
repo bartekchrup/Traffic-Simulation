@@ -5,15 +5,12 @@ using UnityEngine;
 
 public class LightDisplayPanel : MonoBehaviour
 {
-    // Prefab for single traffic light which goes into the lights panel
-    [SerializeField] TrafficLight trafficLightPrefab;
     // To change size of background sprite when panel changes size
-    [SerializeField] SpriteRenderer backgroundSprite;
+    [SerializeField] private SpriteRenderer backgroundSprite;
     // To change size of collider
-    [SerializeField] BoxCollider2D panelCollider;
+    [SerializeField] private BoxCollider2D panelCollider;
 
     LaneNode[] nodes;
-    List<TrafficLight> trafficLights;
 
     // For panel dragging
     private Vector2 dragDistance = Vector2.zero;
@@ -52,30 +49,25 @@ public class LightDisplayPanel : MonoBehaviour
 
     public void SetLaneNodes(LaneNode[] nodesIn) {
         nodes = nodesIn;
-        trafficLights = new List<TrafficLight>();
 
         foreach (LaneNode laneNode in nodes) {
-            // Only add lights for nodes which have a connection
-            if (laneNode.HasConnections()) {
-                addTrafficLight(laneNode);
-            }
+            addLightToPanel(laneNode);
         }
+    }
+
+    public void addLightToPanel(LaneNode laneNode) {
+        TrafficLight lightToShow = laneNode.TrafficLight;
+        // TODO SHOW THE LIGHT ENABLE
+        lightToShow.transform.SetParent(this.transform);
     }
 
     public void SetPosition(Vector2 positionIn) {
         transform.position = positionIn;
     }
 
-    public List<TrafficLight> GetTrafficLights() {
-        return trafficLights;
-    }
-
-    private void addTrafficLight(LaneNode node) {
-        TrafficLight newLight = Instantiate(trafficLightPrefab);
-        newLight.Instantiate(node);
-        newLight.transform.SetParent(this.transform);
-        trafficLights.Add(newLight);
-    }
+    // public List<TrafficLight> GetTrafficLights() {
+    //     return trafficLights;
+    // }
 
     // Change the size of the bg sprite and collider to the size of the panel
     private void updatePanelBackgroundSize() {

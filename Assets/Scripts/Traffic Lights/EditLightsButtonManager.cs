@@ -15,7 +15,7 @@ public class EditLightsButtonManager : MonoBehaviour
     [SerializeField] private Button editSchemeButton;
 
     // Invoked when the enable/disable traffic lights toggle is clicked
-    public void TrafficLightsToggleCanged() {
+    public void TrafficLightsToggleChanged() {
         bool lightsEnabled = enableLightsToggle.isOn;
         editSchemeButton.interactable = lightsEnabled;
         intersectionEditScript.Intersection.SetAreTrafficLightsEnabled(lightsEnabled);

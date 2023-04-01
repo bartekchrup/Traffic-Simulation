@@ -49,11 +49,12 @@ public class TrafficPhaseRow : MonoBehaviour
         return states;
     }
 
-    public void InitialiseRow(int trafficLightsNumber) {
-        lightToggles = new LightPhaseToggle[trafficLightsNumber];
-        for (int i = 0; i < trafficLightsNumber; i++) {
+    public void InitialiseRow(bool[] rowConfig) {
+        lightToggles = new LightPhaseToggle[rowConfig.Length];
+        for (int i = 0; i < lightToggles.Length; i++) {
             lightToggles[i] = Instantiate(lightTogglePrefab);
             lightToggles[i].transform.SetParent(transform);
+            lightToggles[i].SetState(rowConfig[i]);
         }
     }
 

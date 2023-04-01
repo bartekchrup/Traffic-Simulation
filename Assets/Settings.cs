@@ -28,4 +28,14 @@ public class Settings : MonoBehaviour
     public const float DEFAULT_PHASE_DURATION = 10f;
     // Length of time in seconds where lights will be yellow
     public const float PHASE_TRANSITION_DURATION = 1f;
+    // Vehicles will be spawned until this value is reached
+    public const int MAX_VEHICLE_COUNT = 15;
+    // Will spawn a car once every x seconds
+    public const float VEHICLE_SPAWN_INTERVAL = 2f;
+
+    // CARS
+    // The rate at which cars will increase in speed
+    public const float CAR_ACCELERATION = 1f;
+    // Cars will not increase speed if this value is reached
+    public const float MAX_CAR_SPEED = 2f;
 }

@@ -9,7 +9,7 @@ public class Intersection
     public List<RoadNode> nodesList;
     // Traffic light variables
     public bool AreTrafficLightsEnabled = false;
-    private List<bool[]> LightConfig;
+    public List<bool[]> LightConfig { get; private set; }
     public List<TrafficLight> TrafficLights { get; private set; }
     public float TimeSincePhase { get; private set; } = 0f;
     public List<float> PhaseDurations { get; private set; }
@@ -37,7 +37,6 @@ public class Intersection
         for (int i = 0; i < TrafficLights.Count; i++) {
             bool currentLightState = LightConfig[Phase][i];
             bool nextLightState = LightConfig[getNextPhase()][i];
-            Debug.Log("Previous light state: " + currentLightState + ", next state: " + nextLightState);
             // Was Red, will be Green
             if (! currentLightState && nextLightState) {
                 changeLightState(TrafficLights[i], TrafficLight.LightState.RedToGreen);

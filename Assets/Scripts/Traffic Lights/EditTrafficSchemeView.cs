@@ -12,6 +12,8 @@ public class EditTrafficSchemeView : MonoBehaviour
     [SerializeField] TrafficSchemePanel schemePanel;
     // Prefab for UI panel displaying an array of traffic lights
     [SerializeField] LightDisplayPanel lightPanelPrefab;
+    // To exit mode
+    [SerializeField] UIFlowManager flowManager;
 
     // To store the traffic light display panels
     private List<LightDisplayPanel> lightPanelsList;
@@ -19,50 +21,22 @@ public class EditTrafficSchemeView : MonoBehaviour
     // Stores the intersection that is beign edited right now
     private Intersection currentIntersection;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void SetUpTrafficLights() {
-
-    }
-
-    // Called after enabling script, shows all light scheme UI
-    public void EnableEditTrafficLights(Intersection intersection) {
-        currentIntersection = intersection;
-        lightPanelsList = new List<LightDisplayPanel>();
-        leftUIPanel.SetActive(false);
-
-        foreach (RoadNode roadNode in currentIntersection.GetNodes()) {
-            addLightDisaplyPanel(roadNode);
-        }
-        List<TrafficLight> trafficLightList = new List<TrafficLight>();
-        foreach (LightDisplayPanel panel in lightPanelsList) {
-            foreach (TrafficLight trafficLight in panel.GetTrafficLights()) {
-                trafficLightList.Add(trafficLight);
+    void Update() {
+        // When the user right clicks, exit mode
+        if (Input.GetMouseButtonDown(1)) {
+                flowManager.SwitchLaneConnecting(currentIntersection);
             }
+    }
+
+    private void createLightPanels() {
+        lightPanelsList = new List<LightDisplayPanel>();
+        foreach (RoadNode roadNode in currentIntersection.GetNodes()) {
+            addLightDisplayPanel(roadNode);
         }
-        schemePanel.gameObject.SetActive(true);
-        schemePanel.InitialisePanel(trafficLightList, currentIntersection);
     }
 
-    void OnDisable() {
-        leftUIPanel.SetActive(true);
-        schemePanel.gameObject.SetActive(false);
-    }
-
-    private void addLightDisaplyPanel(RoadNode node) {
+    private void addLightDisplayPanel(RoadNode node) {
         LightDisplayPanel newPanel = Instantiate(lightPanelPrefab);
-
         LaneNode[] laneNodes = node.GetOutgoingLaneNodes().ToArray();
         newPanel.SetLaneNodes(laneNodes);
         newPanel.SetPosition(calculatePanelSpawnPos(node));
@@ -70,6 +44,25 @@ public class EditTrafficSchemeView : MonoBehaviour
         lightPanelsList.Add(newPanel);
 
     }
+
+    // Called after enabling script, shows all light scheme UI
+    public void EnableEditTrafficLights(Intersection intersection) {
+        currentIntersection = intersection;
+        createLightPanels();
+        leftUIPanel.SetActive(false);
+        List<TrafficLight> trafficLightList = intersection.TrafficLights;
+
+        schemePanel.gameObject.SetActive(true);
+        schemePanel.InitialisePanel(trafficLightList, currentIntersection);
+    }
+
+    void OnDisable() {
+        // Remove old phase rows
+        schemePanel.DestroyRows();
+        leftUIPanel.SetActive(true);
+        schemePanel.gameObject.SetActive(false);
+    }
+
 
     // Returns a vector LIGHT_PANEL_DIST_RATIO of the road length away from the intersection 
     private Vector2 calculatePanelSpawnPos(RoadNode roadNode) {

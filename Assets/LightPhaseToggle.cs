@@ -11,4 +11,8 @@ public class LightPhaseToggle : MonoBehaviour
     public void stateChanged() {
         State = toggle.isOn;
     }
+
+    public void SetState(bool state) {
+        toggle.isOn = state;
+    }
 }

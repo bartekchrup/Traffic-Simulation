@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TrafficLight : MonoBehaviour
 {
+    // STATIC
     // Used to assign each light a unique number of identify them
     private static int usedLightIndexTracker = 0;
     private static int GetNextLightIndex() {
@@ -21,14 +22,14 @@ public class TrafficLight : MonoBehaviour
         Red = 0,
         RedToGreen = 1,
         Green = 2,
-        GreenToRed = 3,
-    }
+        GreenToRed = 3}
 
     // State sprites
     [SerializeField] private Sprite redSprite;
     [SerializeField] private Sprite redToGreenSprite;
     [SerializeField] private Sprite greenSprite;
     [SerializeField] private Sprite greenToRedSprite;
+
 
     // INSTANCE VARIABLES
     // Displays the lane number
@@ -40,27 +41,14 @@ public class TrafficLight : MonoBehaviour
     // Index used to display letter above light and identify it in scheme edit panel
     public int Index { get; private set; }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void Instantiate(LaneNode nodeIn) {
+    public void InstantiateLight(LaneNode nodeIn) {
         node = nodeIn;
         node.SetTrafficLight(this);
         setIndex();
     }
 
-
     public void SetState(LightState state) {
-        Debug.Log("changing state in light to " + state);
         if (state == LightState.Red) {
             lightSprite.sprite = redSprite;
         } else if (state == LightState.RedToGreen) {

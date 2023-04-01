@@ -10,6 +10,7 @@ public class UIFlowManager : MonoBehaviour
     [SerializeField] private ConnectLanes connectLanesTool;
     [SerializeField] private SelectIntersectionTool selectIntersectionsTool;
     [SerializeField] private EditTrafficSchemeView trafficLightManager;
+    [SerializeField] private StatusBarManager statusBarManager;
 
     public void SwitchRoadBuilding() {
         disableAll();
@@ -36,6 +37,7 @@ public class UIFlowManager : MonoBehaviour
         disableAll();
         trafficLightManager.enabled = true;
         trafficLightManager.EnableEditTrafficLights(intersection);
+        statusBarManager.SetText("Configuring traffic lights. Right click to exit");
     }
 
     private void disableAll() {

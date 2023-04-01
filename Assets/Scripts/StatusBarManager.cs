@@ -36,4 +36,8 @@ public class StatusBarManager : MonoBehaviour
     public void SetTextConnectingExit() {
         textElement.text = CONNECTING_LANES_EXIT_TEXT;
     }
+
+    public void SetText(string text) {
+        textElement.text = text;
+    }
 }

@@ -16,6 +16,9 @@ public class TrafficSchemePanel : MonoBehaviour
     private List<TrafficLight> trafficLights;
     private Intersection intersection;
 
+    // Stores the headers of the scheme editing panel, for destruction when closed
+    private GameObject headerRow;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,26 +37,45 @@ public class TrafficSchemePanel : MonoBehaviour
         phases = new List<TrafficPhaseRow>();
         // Adds the labels for the traffic lights at the top
         generateTopLabels();
-        // Add a row to the panel so there is at least one phase
-        addPhaseRow();
+        // Load the configuration saved in the intersection
+        for (int i = 0; i < intersection.LightConfig.Count; i++) {
+            addPhaseRow(intersection.PhaseDurations[i], intersection.LightConfig[i]);
+        }
+    }
+
+    private void addPhaseRow(float phaseDuration, bool[] rowConfig) {
+        TrafficPhaseRow newPhase = Instantiate(phaseRowPrefab);
+        newPhase.InitialiseRow(rowConfig);
+        // Set parent of new row to this panel
+        newPhase.transform.SetParent(transform);
+        // Update the size of the panel after a child has been added
+        LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+        newPhase.SetDurationInputField(phaseDuration);
+        phases.Add(newPhase);
     }
 
     public void newPhaseButtonClicked() {
-        addPhaseRow();
+        addPhaseRow(Settings.DEFAULT_PHASE_DURATION, new bool[intersection.LightConfig[0].Length]);
     }
 
     public void updateButtonClicked() {
-        updatePhaseInformation();
+        UpdatePhaseInformation();
     }
 
-    private void updatePhaseInformation() {
+    public void UpdatePhaseInformation() {
         List<bool[]> lightConfig = new List<bool[]>();
         foreach (TrafficPhaseRow phase in phases) {
             lightConfig.Add(phase.GetToggleStates());
         }
         intersection.SetLightConfig(lightConfig);
-        intersection.SetTrafficLights(trafficLights);
         intersection.SetPhaseDurations(GetPhaseDurations());
+    }
+
+    public void DestroyRows() {
+        foreach (TrafficPhaseRow phase in phases) {
+            Destroy(phase.gameObject);
+        }
+        Destroy(headerRow);
     }
 
     private List<float> GetPhaseDurations() {
@@ -66,7 +88,7 @@ public class TrafficSchemePanel : MonoBehaviour
 
     private void generateTopLabels()
     {
-        GameObject headerRow = generateHeaderRow();
+        headerRow = generateHeaderRow();
         generateDurationText(headerRow);
         foreach (TrafficLight trafficLight in trafficLights) {
             GameObject newHeading = Instantiate(textPrefab);
@@ -96,14 +118,4 @@ public class TrafficSchemePanel : MonoBehaviour
         durationText.GetComponent<RectTransform>().sizeDelta = new Vector2(75f, 20f);
     }
 
-    public void addPhaseRow() {
-        TrafficPhaseRow newPhase = Instantiate(phaseRowPrefab);
-        newPhase.InitialiseRow(trafficLights.Count);
-        // Set parent of new row to this panel
-        newPhase.transform.SetParent(transform);
-        // Update the size of the panel after a child has been added
-        LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
-        newPhase.SetDurationInputField(Settings.DEFAULT_PHASE_DURATION);
-        phases.Add(newPhase);
-    }
 }

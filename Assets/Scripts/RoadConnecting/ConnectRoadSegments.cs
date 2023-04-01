@@ -26,6 +26,8 @@ public class ConnectRoadSegments : MonoBehaviour
     [SerializeField] private LineDrawer solidLinePrefab;
     // To switch modes to connecting lanes after roads have been connected
     [SerializeField] private UIFlowManager flowManager;
+    // Prefab for single traffic light which goes into the lights panel
+    [SerializeField] private TrafficLight trafficLightPrefab;
 
     private List<RoadEndMarkerManager> roadEndMarkers = new List<RoadEndMarkerManager>();
     private Intersection intersection;
@@ -84,11 +86,36 @@ public class ConnectRoadSegments : MonoBehaviour
             node.IsInIntersection = true;
         }
         drawConnections(roadCorners);
+        setUpTrafficLights(nodes);
         
+
         roadNetworkManager.AddIntersection(intersection);
         
         // Start connecting lanes
         flowManager.SwitchLaneConnecting(intersection);
+    }
+
+    private void setUpTrafficLights(List<RoadNode> nodes) {
+        List<TrafficLight> trafficLights = new List<TrafficLight>();
+        foreach (RoadNode node in nodes) {
+            LaneNode[] laneNodes = node.GetOutgoingLaneNodes().ToArray();
+            foreach (LaneNode laneNode in laneNodes) {
+                TrafficLight newLight = createTrafficLight(laneNode);
+                trafficLights.Add(newLight);
+            }
+        }
+        intersection.SetTrafficLights(trafficLights);
+
+        List<bool[]> newLightConfig = new List<bool[]>();
+        newLightConfig.Add(new bool[trafficLights.Count]);
+        intersection.SetLightConfig(newLightConfig);
+        intersection.SetPhaseDurations(new List<float> {Settings.DEFAULT_PHASE_DURATION});
+    }
+
+    private TrafficLight createTrafficLight(LaneNode node) {
+        TrafficLight newLight = Instantiate(trafficLightPrefab);
+        newLight.InstantiateLight(node);
+        return newLight;
     }
 
     // Draws lines on the screen between road edges in an intersection to connect them
