@@ -18,7 +18,7 @@ public class EditLightsButtonManager : MonoBehaviour
     public void TrafficLightsToggleChanged() {
         bool lightsEnabled = enableLightsToggle.isOn;
         editSchemeButton.interactable = lightsEnabled;
-        intersectionEditScript.Intersection.SetAreTrafficLightsEnabled(lightsEnabled);
+        intersectionEditScript.Intersection.ChangeLightsEnabled(lightsEnabled);
     }
 
     // Starts the traffic light scheme editing script

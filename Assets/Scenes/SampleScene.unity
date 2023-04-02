@@ -800,6 +800,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carPrefab: {fileID: 8043520713597424125, guid: ac5e40f9bbf5c494eab708baeba7e4c5, type: 3}
+  carLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!4 &477593999
 Transform:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ public class ConnectLanes : MonoBehaviour
 {
     // Prefabs for objects instantiated
     [SerializeField] private LaneMarkerManager laneMarkerPrefab;
-    [SerializeField] private BezierCurveDrawer bezierLinePrefab;
+    [SerializeField] private BezierCurveDrawer bezierLinePrefab; // TODO remove
     // To update state
     [SerializeField] private StatusBarManager statusBarManager;
     // To transition between application modes
@@ -68,7 +68,8 @@ public class ConnectLanes : MonoBehaviour
             Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float tangentDistance = Vector2.Distance(startPoint, mouseWorldPos);
             Vector2 startTangent = selectedStartMarker.LaneNode.GetControlPoint(tangentDistance);
-            selectingBezier.SetPoints(startPoint, startTangent, mouseWorldPos, mouseWorldPos);
+            Vector3[] pointArray = BezierCurveDrawer.GeneratePointArray(startPoint, startTangent, mouseWorldPos, mouseWorldPos);
+            selectingBezier.SetPointArray(pointArray);
 
         }
     }
@@ -100,7 +101,7 @@ public class ConnectLanes : MonoBehaviour
     private void showExistingConnections() {
         foreach (LaneMarkerManager marker in enterLaneMarkers) {
             foreach (LaneNode connectedNode in marker.LaneNode.GetConnections()) {
-                drawBezierBetweenNodes(marker.LaneNode, connectedNode, marker.GetColor());
+                addBezierBetweenNodes(marker.LaneNode, connectedNode, marker.GetColor());
             }
         }
     }
@@ -142,7 +143,7 @@ public class ConnectLanes : MonoBehaviour
         for (int i = connectedBeziersList.Count -1; i >= 0; i--) {
             BezierCurveDrawer line = connectedBeziersList[i];
             // If this line has already been drawn
-            if (clickedMarker.GetPosition() == line.endPoint && selectedStartMarker.GetPosition() == line.startPoint) {
+            if (clickedMarker.GetPosition() == line.GetEndPoint() && selectedStartMarker.GetPosition() == line.GetStartPoint()) {
                 connectedBeziersList.RemoveAt(i);
                 Destroy(line.gameObject);
                 selectedStartMarker.LaneNode.UnConnectLanes(clickedMarker.LaneNode);
@@ -151,28 +152,17 @@ public class ConnectLanes : MonoBehaviour
         }
         // Only draw a line if line wasnt already present
         if (!removedLine) {
-            drawBezierBetweenNodes(selectedStartMarker.LaneNode, clickedMarker.LaneNode, selectedStartMarker.GetColor());
-            selectedStartMarker.LaneNode.ConnectLanes(clickedMarker.LaneNode);
+            addBezierBetweenNodes(selectedStartMarker.LaneNode ,clickedMarker.LaneNode, selectedStartMarker.GetColor());
         }
     }
 
-    // Draws a cubic bazier line using two given lane nodes of the specified color
-    private void drawBezierBetweenNodes(LaneNode startNode, LaneNode endNode, Color color) {
-        if (startNode == null || endNode == null) {
-            Debug.LogError("One of the nodes is null");
-            return;
-        }
-        Vector2 startPoint = startNode.GetPosition();
-        Vector2 endPoint = endNode.GetPosition();
-        // The distance of the 2nd and 3rd control points on the bezier line varies with distance between the start and end
-        float tangentDistance = Vector2.Distance(startPoint, endPoint) * Settings.TANGENT_DISTANCE_MULTIPLIER;
-        Vector2 startTangent = startNode.GetControlPoint(tangentDistance);
-        Vector2 endTangent = endNode.GetControlPoint(tangentDistance);
-
-        BezierCurveDrawer lineManager = Instantiate(bezierLinePrefab);
-        lineManager.SetPoints(startPoint, startTangent, endTangent, endPoint);
-        lineManager.SetColor(color);
-        connectedBeziersList.Add(lineManager);
+    private void addBezierBetweenNodes(LaneNode startNode, LaneNode endNode, Color color) {
+        Vector3[] pointArray = BezierCurveDrawer.GetPointArrayBetweenNodes(startNode, endNode);
+        BezierCurveDrawer connectingBezier = Instantiate(bezierLinePrefab);
+        connectingBezier.SetPointArray(pointArray);
+        connectingBezier.SetColor(color);
+        connectedBeziersList.Add(connectingBezier);
+        startNode.ConnectLanes(endNode);
     }
 
     // Generate exit markers but keep them disabled

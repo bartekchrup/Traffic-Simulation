@@ -9,6 +9,7 @@ public class RoadNode
     // which end of the road
     public int roadEndIndex { get; private set; }
     public bool IsInIntersection = false;
+    public Intersection intersection { get; private set; }
 
     public RoadNode(RoadSegment roadIn, int roadSideIndexIn) {
         road = roadIn;

@@ -29,13 +29,25 @@ public class Settings : MonoBehaviour
     // Length of time in seconds where lights will be yellow
     public const float PHASE_TRANSITION_DURATION = 1f;
     // Vehicles will be spawned until this value is reached
-    public const int MAX_VEHICLE_COUNT = 15;
+    public const int MAX_VEHICLE_COUNT = 3;
     // Will spawn a car once every x seconds
     public const float VEHICLE_SPAWN_INTERVAL = 2f;
 
     // CARS
     // The rate at which cars will increase in speed
     public const float CAR_ACCELERATION = 1f;
+    // The rate at which cars will decrease in speed
+    public const float CAR_DECELERATION = 2 * CAR_ACCELERATION;
     // Cars will not increase speed if this value is reached
-    public const float MAX_CAR_SPEED = 2f;
+    public const float MAX_CAR_SPEED = 3f;
+    // The distance at which a car is considered to have 'reached' a node
+    public const float DISTANCE_THRESHOLD = 0.1f;
+    // The distance away from an obstacle that cars will aim for
+    public const float STOPPING_OFFSET = 2f;
+    // How far the car will look for other cars to avoid collisions, this doesnt affect when it starts to decelerate
+    public const float CAR_SIGHT_RANGE = 100f;
+    // Used to move raycasts to the front of cars so that they do not hit themslves
+    public const float CAR_LENGTH = 1.2f;
+
+    
 }

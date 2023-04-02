@@ -6,20 +6,39 @@ public class BezierCurveDrawer : MonoBehaviour
 {
     [SerializeField] private LineRenderer lineRenderer;
 
-    public Vector2 startPoint { get; private set; }
-    public Vector2 endPoint { get; private set; }
+    private Vector3[] pointArray;
 
-    private int linePoints = 100;
+    private const int linePoints = 500;
 
-    public void SetPoints(Vector2 startPointIn, Vector2 controlPoint1, Vector2 controlPoint2, Vector2 endPointIn) {
-        startPoint = startPointIn;
-        endPoint = endPointIn;
-        lineRenderer.positionCount = linePoints;
+    public static Vector3[] GetPointArrayBetweenNodes(LaneNode startNode, LaneNode endNode) {
+        if (startNode == null || endNode == null) {
+            Debug.LogError("One of the nodes is null");
+            return null;
+        }
+        Vector2 startPoint = startNode.GetPosition();
+        Vector2 endPoint = endNode.GetPosition();
+        // The distance of the 2nd and 3rd control points on the bezier line varies with distance between the start and end
+        float tangentDistance = Vector2.Distance(startPoint, endPoint) * Settings.TANGENT_DISTANCE_MULTIPLIER;
+        Vector2 controlPoint1 = startNode.GetControlPoint(tangentDistance);
+        Vector2 controlPoint2 = endNode.GetControlPoint(tangentDistance);
+
+        return GeneratePointArray(startPoint, controlPoint1, controlPoint2, endPoint);
+    }
+
+    public static Vector3[] GeneratePointArray(Vector2 startPoint, Vector2 controlPoint1, Vector2 controlPoint2, Vector2 endPoint) {
         Vector3[] pointArray = new Vector3[linePoints];
         for (int i = 0; i < linePoints; i++) {
             float t = i / (float)(linePoints);
             pointArray[i] = getBezierPoint(t, startPoint, controlPoint1, controlPoint2, endPoint);
         }
+        pointArray[0] = startPoint;
+        pointArray[linePoints - 1] = endPoint;
+        return pointArray;
+    }
+
+    public void SetPointArray(Vector3[] pointArrayIn) {
+        pointArray = pointArrayIn;
+        lineRenderer.positionCount = linePoints;        
         lineRenderer.SetPositions(pointArray);
     }
 
@@ -27,8 +46,16 @@ public class BezierCurveDrawer : MonoBehaviour
         lineRenderer.startColor = color;
         lineRenderer.endColor = color;
     }
+
+    public Vector2 GetStartPoint() {
+        return pointArray[0];
+    }
+
+    public Vector2 GetEndPoint() {
+        return pointArray[pointArray.Length - 1];
+    }
     
-    private Vector3 getBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3) {
+    private static Vector3 getBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3) {
         float u = 1 - t;
         return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3;
         // Equation from https://www.theappguruz.com/blog/bezier-curve-in-games

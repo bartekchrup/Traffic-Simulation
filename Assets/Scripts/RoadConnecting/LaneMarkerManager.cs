@@ -17,7 +17,7 @@ public class LaneMarkerManager : MonoBehaviour, IPointerClickHandler, IPointerEn
     public void SetLaneNode(LaneNode laneNodeIn) {
         LaneNode = laneNodeIn;
 
-        transform.position = LaneNode.lane.centreLine.GetPoint(LaneNode.laneEndIndex);
+        transform.position = LaneNode.GetPosition();
     }
 
     void OnEnable() {

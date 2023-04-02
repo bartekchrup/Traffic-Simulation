@@ -102,6 +102,7 @@ public class ConnectRoadSegments : MonoBehaviour
             foreach (LaneNode laneNode in laneNodes) {
                 TrafficLight newLight = createTrafficLight(laneNode);
                 trafficLights.Add(newLight);
+                laneNode.SetTrafficLightState(TrafficLight.LightState.Red); // Default state red
             }
         }
         intersection.SetTrafficLights(trafficLights);

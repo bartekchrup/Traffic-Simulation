@@ -19,10 +19,6 @@ public class Intersection
         nodesList = new List<RoadNode>();
     }
 
-    public Intersection(List<RoadNode> nodesInIntersectionIn) {
-        nodesList = nodesInIntersectionIn;
-    }
-
     // Changes the light states if needed based ont he traffic phase configuration
     public void UpdateLights() {
         if (inPhaseTransition()) {
@@ -78,6 +74,7 @@ public class Intersection
     }
     public void AddNode(RoadNode node) {
         nodesList.Add(node);
+
     }
 
     public void SetLightConfig(List<bool[]> lightConfigIn) {
@@ -97,8 +94,17 @@ public class Intersection
     }
 
 
-    public void SetAreTrafficLightsEnabled(bool value) {
+    public void ChangeLightsEnabled(bool value) {
         AreTrafficLightsEnabled = value;
+        foreach (TrafficLight trafficLight in TrafficLights) {
+            trafficLight.gameObject.SetActive(value);
+        }
+        if (value == true) {
+            foreach (TrafficLight trafficLight in TrafficLights) {
+                // If lights are disabled, they are green by default
+                trafficLight.node.SetTrafficLightState(TrafficLight.LightState.Green);
+            }
+        }
     }
 
     public List<RoadNode> GetNodes() {

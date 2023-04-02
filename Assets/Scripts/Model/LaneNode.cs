@@ -6,18 +6,19 @@ using UnityEngine;
 public class LaneNode
 {
     public LaneSegment lane { get; private set; }
-    // which end of the road
-    public int laneEndIndex { get; private set; }
 
     public TrafficLight TrafficLight { get; private set; }
-    public bool trafficLightState { get; private set; } = false;
+    public bool IsLightGreen { get; private set; }
 
+    // which end of the road
+    private int laneEndIndex;
     // Set of other nodes this lane is connected to, no repeats
     private HashSet<LaneNode> laneConnections = new HashSet<LaneNode>();
 
     public LaneNode(LaneSegment laneIn, int laneSideIndexIn) {
         lane = laneIn;
         laneEndIndex = laneSideIndexIn;
+        IsLightGreen = true;
     }
 
     public void ConnectLanes(LaneNode node) {
@@ -61,16 +62,11 @@ public class LaneNode
         
     }
 
-    // public bool HasConnections()
-    // {
-    //     return (laneConnections.Count > 0);
-    // }
-
     public void SetTrafficLightState(TrafficLight.LightState state) {
         if (state == TrafficLight.LightState.Green) {
-            trafficLightState = true;
+            IsLightGreen = true;
         } else {
-            trafficLightState = false;
+            IsLightGreen = false;
         }
         TrafficLight.SetState(state);
     }
