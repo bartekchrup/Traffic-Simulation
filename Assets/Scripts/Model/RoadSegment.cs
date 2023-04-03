@@ -91,8 +91,8 @@ public class RoadSegment
 
     private Line calculateLaneMiddleLine(int laneIndex) {
         int centreLaneIndex = Mathf.FloorToInt(lanes.Length/2);
-        float laneOffset = ((laneIndex - centreLaneIndex) * LaneSegment.LANE_WIDTH) + ((lanes.Length + 1) % 2) * (LaneSegment.LANE_WIDTH / 2);
-        return Line.parallelLine(roadCentreLine, laneOffset);
+        float laneOffset = ((laneIndex - centreLaneIndex) * Settings.LANE_WIDTH) + ((lanes.Length + 1) % 2) * (Settings.LANE_WIDTH / 2);
+        return Line.ParallelLine(roadCentreLine, laneOffset);
     }
 
 }

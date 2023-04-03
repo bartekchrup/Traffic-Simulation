@@ -46,10 +46,10 @@ public class NewRoadDrawManager : MonoBehaviour
     private void drawRoadDividor(RoadSegment road) {
         LineDrawer roadDividorLineObj = Instantiate(solidLinePrefab);
         Line roadDividorLine = road.GetDirectionDividorLine();
-        roadDividorLineObj.SetPoints(Line.parallelLine(roadDividorLine, 0.5f * roadDividorLinesSeperation));
+        roadDividorLineObj.SetPoints(Line.ParallelLine(roadDividorLine, 0.5f * roadDividorLinesSeperation));
         roadDividorLineObj.SetLineWidth(roadDividorLineWidth);
         roadDividorLineObj = Instantiate(solidLinePrefab);
-        roadDividorLineObj.SetPoints(Line.parallelLine(roadDividorLine, -0.5f * roadDividorLinesSeperation));
+        roadDividorLineObj.SetPoints(Line.ParallelLine(roadDividorLine, -0.5f * roadDividorLinesSeperation));
         roadDividorLineObj.SetLineWidth(roadDividorLineWidth);
     }
 

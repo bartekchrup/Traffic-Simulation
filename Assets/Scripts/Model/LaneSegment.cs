@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LaneSegment
 {
-    public const float LANE_WIDTH = 2;
+    
 
     private LaneNode[] laneNodes;
 
@@ -25,10 +25,10 @@ public class LaneSegment
 
     // The edge of a lane is the line marking it, so half a lane width away from the centre
     public Line GetLeftEdge() {
-        return Line.parallelLine(centreLine, (-0.5f * LANE_WIDTH));
+        return Line.ParallelLine(centreLine, (-0.5f * Settings.LANE_WIDTH));
     }
 
     public Line GetRightEdge() {
-        return Line.parallelLine(centreLine, (0.5f * LANE_WIDTH));
+        return Line.ParallelLine(centreLine, (0.5f * Settings.LANE_WIDTH));
     }
 }

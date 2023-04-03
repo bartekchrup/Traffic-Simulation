@@ -6,7 +6,7 @@ using System;
 public class Line
 {
     // Returns a parallel line to the given one, offset by the float given
-    public static Line parallelLine(Line l, float offset) {
+    public static Line ParallelLine(Line l, float offset) {
         float newx1 = l.x1 + offset * (l.y2 - l.y1) / l.length;
         float newx2 = l.x2 + offset * (l.y2 - l.y1) / l.length;
         float newy1 = l.y1 - offset * (l.x2 - l.x1) / l.length;

@@ -111,6 +111,7 @@ public class ConnectRoadSegments : MonoBehaviour
         newLightConfig.Add(new bool[trafficLights.Count]);
         intersection.SetLightConfig(newLightConfig);
         intersection.SetPhaseDurations(new List<float> {Settings.DEFAULT_PHASE_DURATION});
+        // intersection.ChangeLightsEnabled(false);
     }
 
     private TrafficLight createTrafficLight(LaneNode node) {

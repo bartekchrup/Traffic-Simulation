@@ -20,8 +20,7 @@ public class Car : MonoBehaviour
 
     public void SetSpawn(LaneNode spawn) {
         roadNetwork = GetComponentInParent<RoadNetworkManager>();
-        Debug.Assert(roadNetwork != null);
-        Debug.Assert(spawn != null);
+
         // Move car to start position
         Vector2 spawnPosition = spawn.GetPosition();
         currentPosition = spawnPosition;
@@ -33,15 +32,11 @@ public class Car : MonoBehaviour
 
         // Work out and set the heading node, this is the other node in the lane
         headingNode = spawn.GetOtherNode();
-        Debug.Assert(headingNode != null);
-        Debug.Log("The heading node is " + headingNode);
-        // BezierCurveDrawer
     }
 
     void Update()
     {
         // If car is passing traffic light
-        // Debug.Assert(headingNode != null);
         if (hasReachedPoint(headingNode.GetPosition())) {
             updateHeadingNode();
             turning = true;
@@ -58,7 +53,13 @@ public class Car : MonoBehaviour
         }
     }
 
+    public float GetSpeed() {return speed;}
+    public bool isStopped() {return (speed < 0.1f);} // True if moving slower than 0.1f
+
     private void moveCarAlongBezier() {
+        if (bezierArray == null) {
+            return; // If the car is done moving
+        }
         float distanceToMove = speed * Time.deltaTime;
         float distanceMoved = 0f;
         Vector2 newPosition = currentPosition;
@@ -73,7 +74,6 @@ public class Car : MonoBehaviour
         if (distanceMoved < distanceToMove) {
             turning = false; // Back on straight road
             Vector2 direction = headingNode.GetPosition() - newPosition;
-            Debug.Assert((distanceToMove - distanceMoved) >= 0);
             moveCarStraightTowards(newPosition, direction, distanceToMove - distanceMoved);
         } else { // If done moving
             setCarPos(newPosition);
@@ -88,14 +88,15 @@ public class Car : MonoBehaviour
         // Calculates position of front of car to avoid raycast hitting this car
         Vector2 frontOfCar = transform.TransformPoint(Vector2.up * Settings.CAR_LENGTH);
         RaycastHit2D hit = Physics2D.Raycast(frontOfCar, transform.up, Settings.CAR_SIGHT_RANGE, carLayerMask);
-        Debug.DrawLine(frontOfCar, Vector2.zero);
+        
         // Debug.DrawRay(frontOfCar, ())
         float distanceToOtherCar = float.PositiveInfinity;
         if (hit.collider != null) {
             distanceToOtherCar = hit.distance;
         }
 
-        if (!headingNode.IsLightGreen) {
+        if (headingNode.IsLightGreen) {
+            // Debug.DrawLine(frontOfCar, Vector2.zero);
             return distanceToOtherCar;
         } else { // Red light
             return Mathf.Min(distanceToTrafficLight, distanceToOtherCar);
@@ -115,7 +116,7 @@ public class Car : MonoBehaviour
             int randomIndex = UnityEngine.Random.Range(0, connectingNodes.Length);
             LaneNode connectedNode = connectingNodes[randomIndex];
             LaneNode nextNode = connectedNode.GetOtherNode();
-            bezierArray = BezierCurveDrawer.GetPointArrayBetweenNodes(headingNode, connectedNode);
+            bezierArray = BezierCurveDrawer.GetPointArrayBetweenNodes(headingNode, connectedNode, Settings.CAR_CURVE_POINT_COUNT);
             Debug.Assert(bezierArray != null);
             bezierIndex = 0;
             headingNode = nextNode; // Sets heading to end of next lane

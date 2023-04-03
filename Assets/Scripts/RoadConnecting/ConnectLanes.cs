@@ -68,7 +68,7 @@ public class ConnectLanes : MonoBehaviour
             Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float tangentDistance = Vector2.Distance(startPoint, mouseWorldPos);
             Vector2 startTangent = selectedStartMarker.LaneNode.GetControlPoint(tangentDistance);
-            Vector3[] pointArray = BezierCurveDrawer.GeneratePointArray(startPoint, startTangent, mouseWorldPos, mouseWorldPos);
+            Vector3[] pointArray = BezierCurveDrawer.GeneratePointArray(startPoint, startTangent, mouseWorldPos, mouseWorldPos, Settings.UI_CURVE_POINT_COUNT);
             selectingBezier.SetPointArray(pointArray);
 
         }
@@ -157,7 +157,7 @@ public class ConnectLanes : MonoBehaviour
     }
 
     private void addBezierBetweenNodes(LaneNode startNode, LaneNode endNode, Color color) {
-        Vector3[] pointArray = BezierCurveDrawer.GetPointArrayBetweenNodes(startNode, endNode);
+        Vector3[] pointArray = BezierCurveDrawer.GetPointArrayBetweenNodes(startNode, endNode, Settings.UI_CURVE_POINT_COUNT);
         BezierCurveDrawer connectingBezier = Instantiate(bezierLinePrefab);
         connectingBezier.SetPointArray(pointArray);
         connectingBezier.SetColor(color);

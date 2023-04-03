@@ -79,6 +79,7 @@ public class Intersection
 
     public void SetLightConfig(List<bool[]> lightConfigIn) {
         LightConfig = lightConfigIn;
+        IncrementPhase();
     }
 
     public void SetTrafficLights(List<TrafficLight> trafficLightsIn) {

@@ -8,9 +8,7 @@ public class BezierCurveDrawer : MonoBehaviour
 
     private Vector3[] pointArray;
 
-    private const int linePoints = 500;
-
-    public static Vector3[] GetPointArrayBetweenNodes(LaneNode startNode, LaneNode endNode) {
+    public static Vector3[] GetPointArrayBetweenNodes(LaneNode startNode, LaneNode endNode, int linePoints) {
         if (startNode == null || endNode == null) {
             Debug.LogError("One of the nodes is null");
             return null;
@@ -22,10 +20,10 @@ public class BezierCurveDrawer : MonoBehaviour
         Vector2 controlPoint1 = startNode.GetControlPoint(tangentDistance);
         Vector2 controlPoint2 = endNode.GetControlPoint(tangentDistance);
 
-        return GeneratePointArray(startPoint, controlPoint1, controlPoint2, endPoint);
+        return GeneratePointArray(startPoint, controlPoint1, controlPoint2, endPoint, linePoints);
     }
 
-    public static Vector3[] GeneratePointArray(Vector2 startPoint, Vector2 controlPoint1, Vector2 controlPoint2, Vector2 endPoint) {
+    public static Vector3[] GeneratePointArray(Vector2 startPoint, Vector2 controlPoint1, Vector2 controlPoint2, Vector2 endPoint, int linePoints) {
         Vector3[] pointArray = new Vector3[linePoints];
         for (int i = 0; i < linePoints; i++) {
             float t = i / (float)(linePoints);
@@ -38,7 +36,7 @@ public class BezierCurveDrawer : MonoBehaviour
 
     public void SetPointArray(Vector3[] pointArrayIn) {
         pointArray = pointArrayIn;
-        lineRenderer.positionCount = linePoints;        
+        lineRenderer.positionCount = pointArray.Length;        
         lineRenderer.SetPositions(pointArray);
     }
 

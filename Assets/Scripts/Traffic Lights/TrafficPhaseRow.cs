@@ -12,7 +12,7 @@ public class TrafficPhaseRow : MonoBehaviour
     [SerializeField] private TMP_InputField durationInputField;
     
     // Phase duration in seconds
-    private float duration;
+    private float duration = Settings.DEFAULT_PHASE_DURATION;
     private LightPhaseToggle[] lightToggles;
 
     // Start is called before the first frame update
