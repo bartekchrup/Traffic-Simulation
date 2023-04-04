@@ -51,10 +51,9 @@ public class RoadNetworkManager : MonoBehaviour
 
     private void updateSimStatusText()
     {
-        displayedSimText = "Simulation running...";
         float simTime = (Time.realtimeSinceStartup - simStartTime);
         float flowRate = carsDespawned / simTime;
-        displayedSimText += string.Format("\nSim Time: {0:0.0} s", simTime);
+        displayedSimText = string.Format("Sim Time: {0:0.0} s", simTime);
         displayedSimText += string.Format("\nCars Spawned: {0}", carsSpawned);
         displayedSimText += string.Format("\nCompleted Journeys: {0}", carsDespawned);
         displayedSimText += string.Format("\nFlow Rate: {0:0.00}", flowRate);
@@ -124,10 +123,7 @@ public class RoadNetworkManager : MonoBehaviour
 
     public void StopSimulation() {
         if (isSimRunning) {
-            simStatusTextComponent.gameObject.SetActive(false);
             isSimRunning = false;
-            // EditorUtility.DisplayDialog("Simulation Complete", displayedSimText, "Close");
-            GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 200f, 200f), displayedSimText);
             for (int i = cars.Count - 1; i >= 0; i--) {
                 DespawnCar(cars[i]);
             }
@@ -144,7 +140,7 @@ public class RoadNetworkManager : MonoBehaviour
 
         Car spawnedCar = Instantiate(carPrefab);
         spawnedCar.transform.SetParent(transform);
-        int randomIndex = UnityEngine.Random.Range(0, spawnPoints.Count - 1);
+        int randomIndex = UnityEngine.Random.Range(0, spawnPoints.Count);
         spawnedCar.SetSpawn(spawnPoints[randomIndex]);
         cars.Add(spawnedCar);
         carsSpawned++;
