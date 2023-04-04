@@ -58,8 +58,8 @@ public class RoadNetworkManager : MonoBehaviour
         displayedSimText += string.Format("\nCompleted Journeys: {0}", carsDespawned);
         displayedSimText += string.Format("\nFlow Rate: {0:0.00}", flowRate);
         displayedSimText += string.Format("\nAverage Speed: {0:0.0} u/s", getAverageSpeed());
-        displayedSimText += string.Format("\nAverage Travel Time: {0:0.0} u/s", getAverageTravelTime());
-        displayedSimText += string.Format("\nTotal Time Waiting: {0:0.0} u/s", getTotalTimeStopped());
+        displayedSimText += string.Format("\nAverage Travel Time: {0:0.0} s", getAverageTravelTime());
+        displayedSimText += string.Format("\nTotal Time Waiting: {0:0.0} s", getTotalTimeStopped());
 
         simStatusTextComponent.text = displayedSimText;
     }

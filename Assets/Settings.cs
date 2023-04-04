@@ -26,7 +26,7 @@ public class Settings : MonoBehaviour
     // the distance between the start and end of the line multiplied by this
     public const float TANGENT_DISTANCE_MULTIPLIER = 0.4f;
     // The number of points in bezier curves calcualted for car movement
-    public const int CAR_CURVE_POINT_COUNT = 1000;
+    public const int CAR_CURVE_POINT_COUNT = 2000;
     // The number of points in bezier curves calcualted for drawing the lines in UI
     public const int UI_CURVE_POINT_COUNT = 100;
     // The propeortion of the length of the road segment away from the intersection which the light panel spawns

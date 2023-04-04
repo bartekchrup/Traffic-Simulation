@@ -73,6 +73,10 @@ public class NewRoadSelectionTool : MonoBehaviour
                 enabled = false;
                 
             }
+        } else if (Input.GetMouseButtonDown(1)) {
+            // Used to detect whether the user has right clicekd, to exit the mode
+            enabled = false;
+
         }
         // Update the position of the 2nd point of the line when the mouse moves
         if (drawingLine) {

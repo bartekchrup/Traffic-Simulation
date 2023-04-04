@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class NewRoadDrawManager : MonoBehaviour
 {
@@ -16,14 +17,14 @@ public class NewRoadDrawManager : MonoBehaviour
     [SerializeField] private float roadDividorLinesSeperation;
     [SerializeField] private float roadDividorLineWidth;
 
-    private int fwdLanesNumber;
-    private int revLanesNumber;
+    private int fwdLanesNumber = 1;
+    private int revLanesNumber = 1;
 
     public void AddNewRoad(Line roadCentreLine) {
         // If the number of lanes on the road selected is invalid, return.
-        if (! updateLaneNumberVars()) {
-            return;
-        }
+        // if (! updateLaneNumberVars()) {
+        //     return;
+        // }
 
         RoadSegment newRoad = new RoadSegment(roadCentreLine, fwdLanesNumber, revLanesNumber);
         roadNetworkManager.AddRoad(newRoad);
@@ -33,6 +34,24 @@ public class NewRoadDrawManager : MonoBehaviour
             drawRoadDividor(newRoad);
         }
         drawLaneMarkings(newRoad);
+    }
+
+    // Updates the variables storing the number of lanes in each direction
+    public void UpdateLaneNumberVars() {
+        // Forward lanes must be 1 or greater. reverse lanes must be 0 or greater
+        bool fwdValid = int.TryParse(fwdInputField.text, out int fwdVal) && fwdVal > 0;
+        bool revValid = int.TryParse(revInputField.text, out int revVal) && fwdVal >= 0;
+        if (fwdValid) {
+            fwdLanesNumber = fwdVal;
+        } else {
+            fwdInputField.text = fwdLanesNumber.ToString();
+        }
+        if (revValid) {
+            revLanesNumber = revVal;
+        } else {
+            revInputField.text = revLanesNumber.ToString();
+        }
+
     }
 
     private void drawRoadEdges(RoadSegment road) {
@@ -61,13 +80,13 @@ public class NewRoadDrawManager : MonoBehaviour
             laneEdgeObj.SetPoints(line);
         }
     }
-
-    private bool updateLaneNumberVars() {
-        bool fwdValid = (int.TryParse(fwdInputField.text, out int fwdVal) && fwdVal > 0);
-        bool revValid = int.TryParse(revInputField.text, out int revVal);
-        fwdLanesNumber = fwdVal;
-        revLanesNumber = revVal;
-        // True if both numbers are valid
-        return (fwdValid && revValid);
-    }
+    
+    // private bool updateLaneNumberVars() {
+    //     bool fwdValid = (int.TryParse(fwdInputField.text, out int fwdVal) && fwdVal > 0);
+    //     bool revValid = int.TryParse(revInputField.text, out int revVal);
+    //     fwdLanesNumber = fwdVal;
+    //     revLanesNumber = revVal;
+    //     // True if both numbers are valid
+    //     return (fwdValid && revValid);
+    // }
 }

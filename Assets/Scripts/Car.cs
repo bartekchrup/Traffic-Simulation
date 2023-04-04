@@ -34,15 +34,16 @@ public class Car : MonoBehaviour
         headingNode = spawn.GetOtherNode();
     }
 
+    // Updates the cars parameters every frame
     void Update()
     {
-        // If car is passing traffic light
+        // If car is passing traffic light (entering intersection)
         if (hasReachedPoint(headingNode.GetPosition())) {
             updateHeadingNode();
             turning = true;
         }
 
-        determineAction();
+        alterSpeed();
         // If the car is in an intersection, turning on a bezier curve
         if (turning) {
             moveCarAlongBezier();
@@ -126,7 +127,8 @@ public class Car : MonoBehaviour
         }
     }
 
-    private void determineAction() {
+    // Choses whether the car should accelerate or decelerate based on obstacles
+    private void alterSpeed() {
 
         float stoppingDistance = (speed * speed) / (2 * Settings.CAR_DECELERATION);
         float obstacleDistance = findClosestObstacle();
