@@ -38,7 +38,7 @@ public class Settings : MonoBehaviour
     // Vehicles will be spawned until this value is reached
     public const int MAX_VEHICLE_COUNT = 15;
     // Will spawn a car once every x seconds
-    public const float VEHICLE_SPAWN_INTERVAL = 2f;
+    public const float VEHICLE_SPAWN_INTERVAL = 1f;
 
     // CARS
     // The rate at which cars will increase in speed

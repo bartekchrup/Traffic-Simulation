@@ -12,7 +12,7 @@ public class EditTrafficSchemeView : MonoBehaviour
     [SerializeField] TrafficSchemePanel schemePanel;
     // Prefab for UI panel displaying an array of traffic lights
     [SerializeField] LightDisplayPanel lightPanelPrefab;
-    // To exit mode
+    // To exit this mode
     [SerializeField] UIFlowManager flowManager;
 
     // To store the traffic light display panels
@@ -35,6 +35,7 @@ public class EditTrafficSchemeView : MonoBehaviour
         }
     }
 
+    // Creates a panel of traffic light displays, represending a single road's lights
     private void addLightDisplayPanel(RoadNode node) {
         LightDisplayPanel newPanel = Instantiate(lightPanelPrefab);
         LaneNode[] laneNodes = node.GetOutgoingLaneNodes().ToArray();
@@ -62,7 +63,6 @@ public class EditTrafficSchemeView : MonoBehaviour
         leftUIPanel.SetActive(true);
         schemePanel.gameObject.SetActive(false);
     }
-
 
     // Returns a vector LIGHT_PANEL_DIST_RATIO of the road length away from the intersection 
     private Vector2 calculatePanelSpawnPos(RoadNode roadNode) {

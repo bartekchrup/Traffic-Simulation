@@ -15,26 +15,6 @@ public class Line
         return new Line(newx1, newy1, newx2, newy2);
     }
 
-    // Returns the point where the two lines intersect
-    // Equation from https://stackoverflow.com/questions/4543506/algorithm-for-intersection-of-2-lines
-    // public static Vector2 Intersection(Line l1, Line l2) {
-    //     float[] coefficients1 = l1.GetLineEquation();
-    //     float[] coefficients2 = l2.GetLineEquation();
-    //     float A1 = coefficients1[0];
-    //     float C1 = coefficients1[1];
-    //     float A2 = coefficients2[0];
-    //     float C2 = coefficients2[1];
-    //     float delta = A1 - A2;
-
-    //     if (delta == 0) {
-    //         throw new ArgumentException("Lines never intersect");
-    //     }
-
-    //     float x = (C1 - C2) / delta;
-    //     float y = (A1 * C2 - A2 * C1) / delta;
-    //     return new Vector2(x, y);
-    // }
-
     // Returns an array of floats A, C corresponding to the line equation in the form Ax + By = C
     // B is always 1
     public float[] GetLineEquation() {
@@ -51,6 +31,7 @@ public class Line
     public float y2 { get; private set; }
     public float length { get; private set; }
 
+    // Create new line object
     public Line(Vector2[] linePoints) {
         x1 = linePoints[0].x;
         y1 = linePoints[0].y;
@@ -59,6 +40,7 @@ public class Line
         length = calculateLength();
     }
 
+    // Create line object from invididual variables
     public Line(float x1In, float y1In, float x2In, float y2In) {
         x1 = x1In;
         y1 = y1In;
@@ -71,14 +53,10 @@ public class Line
         return new Vector2[] { new Vector2(x1, y1), new Vector2(x2, y2) };
     }
 
+    // Returns given point
     public Vector2 GetPoint(int index) {
         return GetPoints()[index];
     }
-
-    // Returns the same line but with the end points reversed
-    // public Line GetReverse() {
-    //     return new Line(x2, y2, x1, y1);
-    // }
 
     // Returns the points of the line in a readable format
     public string GetPrintable() {

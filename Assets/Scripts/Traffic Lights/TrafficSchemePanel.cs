@@ -19,18 +19,6 @@ public class TrafficSchemePanel : MonoBehaviour
     // Stores the headers of the scheme editing panel, for destruction when closed
     private GameObject headerRow;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void InitialisePanel(List<TrafficLight> trafficLightsIn, Intersection intersectionIn) {
         trafficLights = trafficLightsIn;
         intersection = intersectionIn;

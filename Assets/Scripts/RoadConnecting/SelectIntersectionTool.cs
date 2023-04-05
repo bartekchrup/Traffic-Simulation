@@ -9,11 +9,6 @@ public class SelectIntersectionTool : MonoBehaviour
     [SerializeField] private UIFlowManager flowManager;
 
     private List<ItscMarkerManager> markers;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()

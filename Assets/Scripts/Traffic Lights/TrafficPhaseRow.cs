@@ -15,18 +15,6 @@ public class TrafficPhaseRow : MonoBehaviour
     private float duration = Settings.DEFAULT_PHASE_DURATION;
     private LightPhaseToggle[] lightToggles;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void DurationFieldChanged() {
         bool durationValid = float.TryParse(durationInputField.text, out float newDuration);
         if (durationValid) {

@@ -34,7 +34,11 @@ public class UIFlowManager : MonoBehaviour
     }
 
     public void SwitchTrafficLights(Intersection intersection) {
-        disableAll();
+        // Disable all but lane connecting
+        newRoadBuilder.enabled = false;
+        connectRoadsTool.enabled = false;
+        selectIntersectionsTool.enabled = false;
+        
         trafficLightManager.enabled = true;
         trafficLightManager.EnableEditTrafficLights(intersection);
         statusBarManager.SetText("Configuring traffic lights. Right click to exit");

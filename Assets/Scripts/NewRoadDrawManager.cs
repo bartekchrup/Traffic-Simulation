@@ -21,11 +21,6 @@ public class NewRoadDrawManager : MonoBehaviour
     private int revLanesNumber = 1;
 
     public void AddNewRoad(Line roadCentreLine) {
-        // If the number of lanes on the road selected is invalid, return.
-        // if (! updateLaneNumberVars()) {
-        //     return;
-        // }
-
         RoadSegment newRoad = new RoadSegment(roadCentreLine, fwdLanesNumber, revLanesNumber);
         roadNetworkManager.AddRoad(newRoad);
         drawRoadEdges(newRoad);
@@ -80,13 +75,5 @@ public class NewRoadDrawManager : MonoBehaviour
             laneEdgeObj.SetPoints(line);
         }
     }
-    
-    // private bool updateLaneNumberVars() {
-    //     bool fwdValid = (int.TryParse(fwdInputField.text, out int fwdVal) && fwdVal > 0);
-    //     bool revValid = int.TryParse(revInputField.text, out int revVal);
-    //     fwdLanesNumber = fwdVal;
-    //     revLanesNumber = revVal;
-    //     // True if both numbers are valid
-    //     return (fwdValid && revValid);
-    // }
+
 }

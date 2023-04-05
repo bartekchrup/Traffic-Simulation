@@ -36,6 +36,7 @@ public class RoadNetworkManager : MonoBehaviour
             if (intersection.AreTrafficLightsEnabled) {
                 intersection.UpdateLights();
             }
+
         }
 
         // Update if simulation is running

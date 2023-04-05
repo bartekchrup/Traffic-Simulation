@@ -12,18 +12,6 @@ public class NewRoadPanelManager : MonoBehaviour
     [SerializeField] TMP_InputField fwdInputField;
     [SerializeField] TMP_InputField revInputField;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void drawButtonPressed() {
         bool fwdValid = int.TryParse(fwdInputField.text, out int fwdValue);
         bool revValid = int.TryParse(revInputField.text, out int revValue);

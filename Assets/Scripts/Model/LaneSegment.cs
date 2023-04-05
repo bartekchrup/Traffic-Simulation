@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class LaneSegment
 {
-    
-
+    // Contains the 2 lane nodes between which the lane exists.
     private LaneNode[] laneNodes;
-
     // The centreline is the line from the start to the end of the lane
     public Line centreLine { get; private set; }
     // If reverse is true it means the lane is from the end of the second point on the line to the first

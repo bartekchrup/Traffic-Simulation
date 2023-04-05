@@ -7,6 +7,7 @@ public class Intersection
 {
     // Road nodes of which this intersection consists
     public List<RoadNode> nodesList;
+    
     // Traffic light variables
     public bool AreTrafficLightsEnabled = false;
     public List<bool[]> LightConfig { get; private set; }
@@ -94,7 +95,7 @@ public class Intersection
         TimeSincePhase += value;
     }
 
-
+    // Turn the traffic lights on or off in the intersection, called when the check box value is changed.
     public void ChangeLightsEnabled(bool value) {
         AreTrafficLightsEnabled = value;
         foreach (TrafficLight trafficLight in TrafficLights) {

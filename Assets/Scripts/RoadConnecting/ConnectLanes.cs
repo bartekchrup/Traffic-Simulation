@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class ConnectLanes : MonoBehaviour
 {
     // Prefabs for objects instantiated
     [SerializeField] private LaneMarkerManager laneMarkerPrefab;
-    [SerializeField] private BezierCurveDrawer bezierLinePrefab; // TODO remove
+    [SerializeField] private BezierCurveDrawer bezierLinePrefab;
     // To update state
     [SerializeField] private StatusBarManager statusBarManager;
     // To transition between application modes
@@ -20,9 +21,7 @@ public class ConnectLanes : MonoBehaviour
     private List<LaneMarkerManager> enterLaneMarkers;
     private List<LaneMarkerManager> exitLaneMarkers;
     private bool showingExitMarkers;
-
     private LaneMarkerManager selectedStartMarker;
-
     private BezierCurveDrawer selectingBezier;
     private List<BezierCurveDrawer> connectedBeziersList;
 
@@ -93,8 +92,17 @@ public class ConnectLanes : MonoBehaviour
         setUpExitMarkers();
         showEntryMarkers();
         showExistingConnections();
+        showTrafficSection();
+    }
+
+    // Displays and updates the section about editing traffic lights in the left UI panel
+    private void showTrafficSection() {
         // Show buttons to navigate to traffic light edit mode
         trafficLightPanel.SetActive(true);
+        Toggle lightsOnToggle = trafficLightPanel.gameObject.GetComponentInChildren<Toggle>();
+        // Update state of toggle based on if traffic lights are enabled
+        lightsOnToggle.isOn = Intersection.AreTrafficLightsEnabled;
+
     }
 
     // Adds bezier curves to connectedBeziersList for connections already made

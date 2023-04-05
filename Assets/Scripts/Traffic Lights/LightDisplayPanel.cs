@@ -14,13 +14,6 @@ public class LightDisplayPanel : MonoBehaviour
 
     // For panel dragging
     private Vector2 dragDistance = Vector2.zero;
-     
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -36,16 +29,6 @@ public class LightDisplayPanel : MonoBehaviour
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         transform.position = mousePos - dragDistance;;
     }
-
-    // DEBUG PURPOSES ONLY
-    // private void OnMouseEnter() {
-    //     Debug.Log("Mouse clicked");
-    //     foreach (TrafficLight light in trafficLights) {
-    //         int newState = (light.node.trafficLightState + 1) % 4;
-    //         light.node.SetTrafficLightState(newState);
-    //         light.SetState((TrafficLight.LightState)newState);
-    //     }
-    // }
 
     public void SetLaneNodes(LaneNode[] nodesIn) {
         nodes = nodesIn;
@@ -64,10 +47,6 @@ public class LightDisplayPanel : MonoBehaviour
     public void SetPosition(Vector2 positionIn) {
         transform.position = positionIn;
     }
-
-    // public List<TrafficLight> GetTrafficLights() {
-    //     return trafficLights;
-    // }
 
     // Change the size of the bg sprite and collider to the size of the panel
     private void updatePanelBackgroundSize() {
